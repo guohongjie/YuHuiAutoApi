@@ -1,0 +1,193 @@
+body,div,ul,li,p,span {
+    margin: 0;
+    padding:0;
+}
+.header{
+    font-size: 28px;
+    height: 70px;
+    color: #fff;
+    background:#2b65d9;
+    position: relative;
+}
+.title{
+    width: 100%;
+    text-align: center;
+    line-height: 70px;  
+}
+.logo{
+    height: 70px;
+    position: absolute;
+}
+.main .main-hd{
+    display: flex;
+    color: #48576a;
+    position: absolute;
+    top: 70px;
+    bottom: 0px;
+    width: 100%;
+}
+.main .article{
+    width:220px;
+    background:#f9f9f9;
+    border-right:1px solid #ddd;
+} 
+.article .article-list .article-list-tit{
+    height: 40px;   
+    line-height: 40px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+}
+.article-list-tit:after{
+    content: "";
+    background: url(../images/b.png) no-repeat;
+    width:40px;
+    height: 40px;
+    position: absolute;
+    right: 10px;
+    top:13px;
+}
+.article-name{
+	background: #eef1f6 none repeat scroll 0 0;
+	font-weight: bold;
+	line-height: 40px;
+    overflow: hidden;
+    text-align: center;
+}
+.down:after{
+    background: url(../images/a.png) no-repeat;
+}
+.article .article-list ul{
+    list-style: none;
+    background:#e6ecf8;
+    display: none;
+}
+.article .article-list ul li{
+    height:40px;
+    line-height: 40px;
+    text-align: center;
+}
+.article .article-list ul li:hover,.article .article-list .article-list-tit:hover{
+    background:#d8e3f6;
+}
+.section-time{
+    margin:20px;
+}
+.ui-datepicker .ui-datepicker-header,.ui-datepicker .ui-state-active{
+    background:#5A8CF0;
+}
+.cur{
+    background:#d8e3f6;
+	color:2b65d9;
+}
+.section{
+    width: 100%;
+}
+.section-btn{
+    height: 40px;
+    line-height: 40px;
+    background:#eef1f6;
+    text-align: right;
+}
+.section-btn a{
+    display: inline-block;
+    width:80px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    margin: 0px 10px;
+    text-decoration: none;
+    background:#5589f2;
+    color: #fff;
+    border:1px solid #ccc;
+    border-radius: 5px;
+}
+.ui-datepicker .ui-datepicker-title{
+    line-height: 0px;
+}
+.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next{
+    top:-2px;
+}
+.ui-datepicker .ui-datepicker-title {
+    margin: 0 1em;
+}
+.section-content{
+    background: white;
+    height: 100%;
+    display: none;
+}
+a{
+    display: inline-block;
+}
+.seepage{
+    text-decoration: none;
+    display: none;
+    margin: 20px;
+    padding:5px 10px;
+    background:#ff4c4c;
+    border:1px solid #ddd;
+    width: 120px;
+    height: 30px;
+    background: #0098ce;
+    text-align: center;
+    line-height: 30px;
+    color: #fff;
+    border-radius: 3px;
+}
+.mask{
+    width:100%; 
+    height:100%; 
+    background:#000;
+    position:absolute;
+    left: 0;
+    top:0;
+    display: none;
+}
+#dialog_title{
+    background:#aeb7c4;
+    height:27px;
+    cursor:move;
+    z-index: 111;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+}
+#dialog_close{
+    width:18px; 
+    height:18px;  
+    cursor:pointer; 
+    color:#fff;
+    position: absolute;
+    z-index:555;
+    right: 13px;
+    top:0;
+    
+}
+#dialog_name{
+    left: 0px; 
+    color: #fff;
+}
+.build-tab{
+    height: 20px;
+    line-height: 20px;
+    position: absolute;
+    right:44px;
+    top:50px;
+    background:#fff;
+}
+.build-tab .buildbtn{
+    width:70px;
+    height: 30px;
+    background:#5589f2;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #fff;
+    line-height: 30px;
+    display: inline-block;
+    text-align: center;
+}
+
+.online{
+    display: none;
+}

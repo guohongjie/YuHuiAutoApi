@@ -1,0 +1,6 @@
+*.log
+*.ini
+config.ini
+ReportHtml
+*.py[cod]
+manage.py

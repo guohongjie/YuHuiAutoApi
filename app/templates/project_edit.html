@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>技术部接口测试</title>
+    <meta name="description" content="Electronic City Technology Department Release Record" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/font-awesome.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/ace-fonts.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/ace.min.css') }}" id="main-ace-style" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/api_edit.css') }}"/>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/script/jquery-1.10.2.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/script/datepicker.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/script/ace-extra.min.js') }}"></script>
+    <style type="text/css">.heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}</style>
+            <script type="text/javascript">!function(e,t,a){function n(){c(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}"),o(),r()}function r(){for(var e=0;e<d.length;e++)d[e].alpha<=0?(t.body.removeChild(d[e].el),d.splice(e,1)):(d[e].y--,d[e].scale+=.004,d[e].alpha-=.013,d[e].el.style.cssText="left:"+d[e].x+"px;top:"+d[e].y+"px;opacity:"+d[e].alpha+";transform:scale("+d[e].scale+","+d[e].scale+") rotate(45deg);background:"+d[e].color+";z-index:99999");requestAnimationFrame(r)}function o(){var t="function"==typeof e.onclick&&e.onclick;e.onclick=function(e){t&&t(),i(e)}}function i(e){var a=t.createElement("div");a.className="heart",d.push({el:a,x:e.clientX-5,y:e.clientY-5,scale:1,alpha:1,color:s()}),t.body.appendChild(a)}function c(e){var a=t.createElement("style");a.type="text/css";try{a.appendChild(t.createTextNode(e))}catch(t){a.styleSheet.cssText=e}t.getElementsByTagName("head")[0].appendChild(a)}function s(){return"rgb("+~~(255*Math.random())+","+~~(255*Math.random())+","+~~(255*Math.random())+")"}var d=[];e.requestAnimationFrame=function(){return e.requestAnimationFrame||e.webkitRequestAnimationFrame||e.mozRequestAnimationFrame||e.oRequestAnimationFrame||e.msRequestAnimationFrame||function(e){setTimeout(e,1e3/60)}}(),n()}(window,document);</script>
+
+</head>
+<body class="no-skin">
+<div class="main-container" id="main-container">
+</div>
+<div class="main-content">
+</div>
+<div class="page-content">
+    <div class="page-content-area">
+            <div class="col-xs-12">
+                        <div class="table-header">
+                            测试项目查询
+                        </div>
+                        <form id="search_form" name="search_form" method="post" action="" style="padding: 0px; margin: 0px;" class="form-inline">
+                            <div id="panel-body-search" class="col-xs-12 panel-body clearfix">
+                                <div class="clearfix form-group">
+                                    <label class="control-label text-right">测试组别</label>
+                                    <select id="test_group" class="form-control" style="width:230px;" name="测试组别">
+                                        <option value="None" selected = "selected">请选择组别</option>
+                                        {% for group in test_groups %}
+                                            <option value="{{ group.deptName }}">{{ group.deptName }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="clearfix form-group">
+                                    <label class="control-label text-right">测试业务项目</label>
+
+                                    <select id="project" class="form-control" style="width:230px;" name="测试项目">
+
+                                        <option value="None" selected = "selected">请选择项目</option>
+                                        {% for project in api_project %}
+                                            <option value="{{ project[0] }}">{{ project[0] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="clearfix form-group">
+                                    <label class="control-label text-right">项目状态</label>
+                                    <select id="pro_status" class="form-control" style="width:230px;" name="项目状态">
+                                        <option value="None" selected = "selected">请选择状态</option>
+                                        <option value="0" selected = "selected">已完成</option>
+                                        <option value="1" selected = "selected">进行中</option>
+                                        <option value="2" selected = "selected">未开始</option>
+                                        <option value="3" selected = "selected">已延期</option>
+                                    </select>
+                                </div>
+                                <div class="clearfix form-group">
+                                     <a class="btn btn-primary btn-large theme-login" href="javascript:;" style="margin-top: -5%;margin-bottom: -5%;margin-right: 100%;" >新增测试项目</a>
+                                </div>
+                                <div class="clearfix form-group">
+                                    <a href="/dubboIndex">链接到Dubbo</a> &nbsp&nbsp&nbsp&nbsp
+                                    <a href="/httpIndex/1" >链接到Http</a>
+                                </div>
+                            </div>
+
+                        </form>
+                        <div class="text-right clearfix">
+                            <button class="btn btn-default" id="btn2"  style="margin-right: 30px" >查 询</button>
+                            <button class="btn btn-default" type="button" onclick="clearForm();" style="margin-right: 50px">清 空</button>
+                        </div>
+                        <table id="sample-table-2" class="table table-striped table-bordered table-hover">
+                            <tbody>
+                            <tr>
+                                <th width="5%" class="btn-info wctv">项目序号</th>
+                                <th width="5%" class="btn-info wctv">项目名称</th>
+                                <th width="20%" class="btn-info wctv">项目描述</th>
+                                <th width="20%" class="btn-info wctv">项目domain</th>
+                                <th width="5%" class="btn-info wctv">所属组别</th>
+                                <th width="5%" class="btn-info wctv">操作</th>
+                                {#              <th width="15%" class="btn-info wctv">预期结果</th>#}
+                                {#              <th width="10%" class="btn-info wctv">操 作</th>#}
+                            </tr>
+                            </tbody>
+                            <tbody id="casetb">
+                            </tbody>
+                        </table>
+                        <div class="theme-buy">
+                        </div>
+            </div>
+
+    </div>
+</div>
+<div class="theme-popover">
+    <div class="theme-poptit">
+        <a href="javascript:;" title="关闭" class="close">&times;</a>
+        <h3>增加项目</h3>
+    </div>
+    <div class="theme-popbod dform">
+        <table border="5" width="100%" class="CSSearchTbl" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr height="36px">
+                <th hidden="hidden">id</th>
+                <th width="25%" style="text-align: center">项目名称</th>
+                 <th width="25%" style="text-align: center">项目名称(EN)</th>
+                <th width="25%" style="text-align: center">项目domain</th>
+                <th width="25%" style="text-align: center">项目状态</th>
+            </tr>
+            </tbody>
+            <tbody id="tbdata">
+            <tr height="36px">
+                <td hidden="hidden"><input type="text" value="" id="targetId"/></td>
+                <td><input style="width: 100%; height: 100%;padding:25px 12px 24px 12px " type="text" value="" id="project_name" placeholder="项目名称"/></td>
+                <td><input style="width: 100%; height: 100%;padding:25px 12px 24px 12px " type="text" value="" id="project_en" placeholder="项目名称(EN)"/></td>
+                <td><input style="width: 100%; height: 100%;padding:25px 12px 24px 12px " type="text" value="" id="project_domain" placeholder="项目domain"/></td>
+                <td><select id="project_status" class="form-control" style="width:100%;" name="项目状态">
+                                        <option value="1" selected = "selected">进行中</option>
+                                        <option value="0" selected = "selected">已完成</option>
+                                    </select></td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr height="36px">
+                <th width="25%" style="text-align: center">项目起始日期</th>
+                 <th width="25%" style="text-align: center">项目截止日期</th>
+                <th colspan="2" width="50%" style="text-align: center">项目描述</th>
+            </tr>
+            </tbody>
+            <tbody>
+                <tr height="36px">
+                <td><input style="width: 100%; height: 100%;padding:25px 12px 24px 12px " type="date" id="startDate" placeholder="起始日期"/></td>
+                <td><input style="width: 100%; height: 100%;padding:25px 12px 24px 12px " type="date" id="endDate" placeholder="终止日期"/></td>
+                <td colspan="2"><textarea id="RC" style="width: 100%"></textarea></td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr colspan="2" style="position: relative;">
+                <td class="right" colspan="2" style="position: absolute; right: 0%; border: none;"> <button id="btn1" class="btn btn-primary pull-left col-sm-12 tbl-search" data-dismiss="modal"> 保存数据 </button> </td>
+                {#       <td class="right" colspan="2" style="position: absolute; right: 10%; border: none;"> <button id="btn4" class="btn btn-primary pull-left col-sm-12 tbl-search" data-dismiss="modal"> 运行测试 </button> </td>#}
+            </tr>
+            </tbody>
+        </table>
+        <p id="chaneTexty" style="color: red;"></p>
+    </div>
+</div>
+<div class="theme-popover-mask"></div>
+<script type="text/javascript">
+function clearForm() {
+    location.reload();}
+</script>
+<script src="{{ url_for('static',filename='js/script/project.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,351 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>API平台</title>
+    <link href="{{url_for('static',filename='css/amazeui.min.css')}}"  rel="stylesheet">
+    <link href="{{url_for('static',filename='css/admin.css')}}"  rel="stylesheet">
+    <link href="{{url_for('static',filename='css/app.css')}}"  rel="stylesheet">
+    <link href="{{url_for('static',filename='css/bootstrap/bootstrap.min.css')}}"  rel="stylesheet">
+    <link rel="icon" href="{{url_for('static',filename='img/logo.png')}}" type="image/x-icon">
+    <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/echarts.common.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/app.js')}}"></script>
+    <script src="{{url_for('static',filename='js/script/jquery-1.10.2.js')}}"></script>
+    <style type="text/css">.heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}</style>
+
+</head>
+<body style="background-color:black" >
+<div class="tpl-content-wrapper" style="margin-top: -7px;">
+        <div class="row">
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat blue">
+                    <div class="visual">
+                        <i class="am-icon-comments-o"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number"> Project: {{ project_cout }} </div>
+                        <div class="desc"> 项目</div>
+                    </div>
+                    <a class="more" href="{{ url_for('views.project_select') }}"> 查看项目
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat blue">
+                    <div class="visual">
+                        <i class="am-icon-apple"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number">
+                            Interface: {{ jiekou }}
+                        </div>
+                        <div class="desc"> 接口</div>
+                    </div>
+                    <a class="more" href="{{ url_for('views.http_select',intBool='1') }}"> 查看更多
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat blue">
+                    <div class="visual">
+                        <i class="am-icon-comments-o"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number"> TestReport </div>
+                        <div class="desc"> 测试报告</div>
+                    </div>
+                    <a class="more" href="/Report"> 查看报告
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat blue">
+                    <div class="visual">
+                        <i class="am-icon-comments-o"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number"> TsutieMake </div>
+                        <div class="desc"> 测试集合</div>
+                    </div>
+                    <a class="more" href="/httpSuite"> 上传集合
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat red">
+                    <div class="visual">
+                        <i class="am-icon-comments-o"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number"> PhonesManager </div>
+                        <div class="desc"> 号码管理</div>
+                    </div>
+                    <a class="more" href="/testIndex"> 查看号码
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat red">
+                    <div class="visual">
+                        <i class="am-icon-comments-o"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number"  onclick="displayInput()"> CreatePhone </div>
+                        <div id="createPhone" class="desc">
+                        </div>
+                    </div>
+                    <a class="more" onclick="makeUser()">
+                        创建号码
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat red">
+                    <div class="visual">
+                        <i class="am-icon-comments-o"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number"  onclick="displayCouponInput()"> CreateCoupon </div>
+                        <div id="CreateCoupon" class="desc">
+                        </div>
+                    </div>
+                    <a class="more" onclick="createCoupon()">
+                        创建优惠券
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat red">
+                    <div class="visual">
+                        <i class="am-icon-comments-o"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number"  onclick="displayRunSuiteApiInput()"> RunSuiteApi </div>
+                        <div id="RunSuiteApi" class="desc">
+                        </div>
+                    </div>
+                    <a class="more" onclick="RunSuiteApi()">
+                        运行测试集
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat purple">
+                    <div class="visual">
+                        <i class="am-icon-comments-o"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number"  onclick="displaySetProjectKey()"> RunApiIndex  </div>
+                        <div id="run_api_index" class="desc">
+                        </div>
+                    </div>
+                    <a class="more" href="/run_api_index" >
+                        接口调度集
+                     <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat purple">
+                    <div class="visual">
+                        <i class="am-icon-comments-o"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number"> ToBeContinued  </div>
+                        <div id="toBeContinued" class="desc">
+                        </div>
+                    </div>
+                    <a class="more" >
+                        未完待续...
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12"></div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12"></div>
+ </div>
+</div>
+<script type="text/javascript">
+    function displayInput(){
+    text = '<input style="background-color:transparent;float:left;width:20%;text-align:center;margin-left:20px;" type="text"  name="env" id="env" placeholder="环境"><input style="background-color:transparent;float:left;width:20%;text-align:center;color:#FFF;opacity: 1;" type="text"  name="num" id="num" placeholder="编号"><input style="background-color:transparent;float:left;width:40%;text-align:center;color:#FFF;opacity: 1;" type="text"  name="phone" id="phone" placeholder="手机号码"><input style="background-color:transparent;float:left;width:10%;text-align:center;color:#FFF;opacity: 1;" type="text"  name="user_role" id="user_role" placeholder="角色">';
+    if($("#env").length>0){
+        $("#createPhone").empty();}
+    else{
+    $("#createPhone").append(text);
+    }
+    }
+    function displayCouponInput(){
+    text = '<input style="background-color:transparent;float:left;width:20%;text-align:center;margin-left:20px;" type="text"  name="env" id="env" placeholder="环境"><input style="background-color:transparent;float:left;width:20%;text-align:center;color:#FFF;opacity: 1;" type="text"  name="num" id="num" placeholder="编号"><input style="background-color:transparent;float:left;width:40%;text-align:center;color:#FFF;opacity: 1;" type="text"  name="phone" id="phone" placeholder="手机号码"><input style="background-color:transparent;float:left;width:10%;text-align:center;color:#FFF;opacity: 1;" type="text"  name="couponPrice" id="couponPrice" placeholder="金额">';
+    if($("#env").length>0){
+        $("#CreateCoupon").empty();}
+    else{
+        $("#CreateCoupon").append(text);
+    }
+    }
+    function displayRunSuiteApiInput(){
+    text = '<input style="background-color:transparent;float:left;width:20%;text-align:center;margin-left:20px;" type="text"  name="api_project" id="api_project" placeholder="项目"><input style="background-color:transparent;float:left;width:10%;text-align:center;color:#FFF;opacity: 1;" type="text"  name="env_num" id="env_num" placeholder="编号"><input style="background-color:transparent;float:left;width:10%;text-align:center;color:#FFF;opacity: 1;" type="text"  name="env_flag" id="env_flag" placeholder="环境"><input style="background-color:transparent;float:left;width:15%;text-align:center;color:#FFF;opacity: 1;" type="text"  name="developer" id="developer" placeholder="发布人"><input style="background-color:transparent;float:left;width:20%;text-align:center;color:#FFF;opacity: 1;" type="text"  name="developer_project" id="developer_project" placeholder="发布项目"><input style="background-color:transparent;float:left;width:13%;text-align:center;color:#FFF;opacity: 1;" type="text"  name="branch" id="branch" placeholder="分支">';
+    if($("#env_flag").length>0){
+        $("#RunSuiteApi").empty();}
+    else{
+    $("#RunSuiteApi").append(text);
+    }
+    }
+
+    function displaySetProjectKey(){
+       if($("#project_key").length>0){
+        $("#run_api_index").empty();
+        }
+        else{
+     $.ajax({
+             url: "/get_redis_key",
+             type: "get"
+                 }).done(function(result){
+                        //alert(typeof(result));
+                        var wc=result.split(",");
+                       // var redis_key=result
+                        text=""
+                          for (i=0;i<wc.length;i++){
+                           text=text+'<option >'+wc[i]+'</option>'
+                          }
+                        var text_1='<select id="project_key" style="color:black;float:left;width:40%;text-align:center;margin-left:20px;" name="测试项目"><option value="None" selected="selected">请选择项目</option>'+text+'</select>';
+                        var text_2='<input style="background-color:transparent;float:left;width:30%;text-align:center;margin-left:25px;" type="text"  name="developer" id="project_value" placeholder="项目值">';
+                        var text_3='<i onclick="setValue()" class="m-icon-swapright m-icon-white" style="background-color:transparent;float:left;width: 13%;/* text-align:center; */margin-left: 15px;"></i>'
+                        text_4=text_1+text_2+text_3;
+                      //  alert(text_3);
+                      $("#run_api_index").append(text_4);
+                       })
+    }}
+
+
+    function makeUser(){
+    var env = $("#env").val();
+    var num = $("#num").val()
+    var phone = $("#phone").val();
+    var user_role = $("#user_role").val();
+  //   alert(env);
+ //    alert(num);
+ //    alert(phone);
+  //   alert(user_role);
+  if ($("#user_role").length>0){
+       $.ajax({
+             url: "/make_user",
+             type: "get",
+             data: {
+                 env_num: num,
+                 env_flag: env,
+                 phones: phone,
+                 user_role:user_role
+                 }
+                 }).done(function(result){
+                    if (result.code == "200"){
+                        alert(result.datas);
+                        }
+                    else if (result.code != "204"){
+                        alert(JSON.stringify(result));
+                        }
+                    else{
+                        alert(JSON.stringify(result));
+                       }
+                });
+                }
+    else{
+    alert("请点击 CreatePhone 元素，并输入参数");
+    }
+    }
+
+function createCoupon(){
+    var env = $("#env").val();
+    var num = $("#num").val()
+    var phone = $("#phone").val();
+    var couponPrice = $("#couponPrice").val();
+  //   alert(env);
+ //    alert(num);
+ //    alert(phone);
+  //   alert(couponPrice);
+  if ($("#couponPrice").length>0){
+       $.ajax({
+             url: "/get_coupon",
+             type: "get",
+             data: {
+                 env_num: num,
+                 env_flag: env,
+                 phone: phone,
+                 couponPrice:couponPrice
+                 }
+                 }).done(function(result){
+                    if (result.code == "200"){
+                        alert(JSON.stringify(result));
+                        }
+                    else{
+                        alert(JSON.stringify(result));
+                       }
+                });
+             }
+      else{
+      alert("请点击 CreateCoupon 元素，并输入参数");
+      }
+    }
+ function RunSuiteApi(){
+    var api_project = $("#api_project").val();
+    var env_num = $("#env_num").val();
+    var env_flag = $("#env_flag").val();
+    var developer = $("#developer").val();
+    var developer_project = $("#developer_project").val();
+    var branch = $("#branch").val();
+  if ($("#api_project").length>0){
+       $.ajax({
+             url: "/runSuiteApi_yunwei",
+             type: "get",
+             data: {
+                 project: api_project,
+                 env_flag: env_flag,
+                 env_num: env_num,
+                 developer:developer,
+                 developer_project:developer_project,
+                 branch:branch
+                 }
+                 }).done(function(result){
+                    if (result.code == "200"){
+                        alert(JSON.stringify(result));
+                        }
+                    else{
+                        alert(JSON.stringify(result));
+                       }
+                });
+             }
+      else{
+      alert("请点击 RunSuiteApi 元素，并输入参数");
+      }
+    }
+    function setValue(){
+    $.ajax({
+             url: "/set_key_value",
+             type: "get",
+             data: {
+                 key: $("#project_key").find("option:selected").val(),
+                 value: $("#project_value").val(),
+                 }
+                 }).done(function(result){
+                    if (result.code == "200"){
+                        alert(JSON.stringify(result));
+                        }
+                    else{
+                        alert(JSON.stringify(result));
+                       }
+                });
+             }
+
+</script>
+<script type="text/javascript">!function(e,t,a){function n(){c(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}"),o(),r()}function r(){for(var e=0;e<d.length;e++)d[e].alpha<=0?(t.body.removeChild(d[e].el),d.splice(e,1)):(d[e].y--,d[e].scale+=.004,d[e].alpha-=.013,d[e].el.style.cssText="left:"+d[e].x+"px;top:"+d[e].y+"px;opacity:"+d[e].alpha+";transform:scale("+d[e].scale+","+d[e].scale+") rotate(45deg);background:"+d[e].color+";z-index:99999");requestAnimationFrame(r)}function o(){var t="function"==typeof e.onclick&&e.onclick;e.onclick=function(e){t&&t(),i(e)}}function i(e){var a=t.createElement("div");a.className="heart",d.push({el:a,x:e.clientX-5,y:e.clientY-5,scale:1,alpha:1,color:s()}),t.body.appendChild(a)}function c(e){var a=t.createElement("style");a.type="text/css";try{a.appendChild(t.createTextNode(e))}catch(t){a.styleSheet.cssText=e}t.getElementsByTagName("head")[0].appendChild(a)}function s(){return"rgb("+~~(255*Math.random())+","+~~(255*Math.random())+","+~~(255*Math.random())+")"}var d=[];e.requestAnimationFrame=function(){return e.requestAnimationFrame||e.webkitRequestAnimationFrame||e.mozRequestAnimationFrame||e.oRequestAnimationFrame||e.msRequestAnimationFrame||function(e){setTimeout(e,1e3/60)}}(),n()}(window,document);</script>
+
+</div>
+</body>
+</html>

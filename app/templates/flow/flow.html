@@ -1,0 +1,512 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>发布流程</title>
+    <link type="text/css" href="{{ url_for('static',filename='css/jquery-ui-1.8.4.custom.css') }}" rel="stylesheet"/>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/myflow/raphael-min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/myflow/jquery-ui/jquery-1.4.2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/myflow/jquery-ui/jquery-ui-1.8.4.custom.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/myflow/myflow.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/myflow/myflow.jpdl4.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/myflow/myflow.editors.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/myflow/flowAjax.js') }}"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+            pading: 0;
+            text-align: left;
+            font-family: Arial, sans-serif, Helvetica, Tahoma;
+            font-size: 15px;
+            line-height: 1.5;
+            color: black;
+            background-image: url(static/img/flowImages/bg.png);
+            position: relative;
+        }
+.top{
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 60px;
+/*	min-width: 1366px;*/
+	width: 100%;
+	background-color: #F7F7F7;
+	box-shadow: 0 -15px 30px #808080 inset;
+	z-index:9999;
+}
+.top function{
+	float: left;
+	padding: 5px;
+}
+h3 {
+font-size: 24.5px;
+}
+h1, h2, h3 {
+    line-height: 40px;
+}
+h1, h2, h3, h4, h5, h6 {
+    margin: 10px 0;
+    font-family: inherit;
+    font-weight: bold;
+    line-height: 20px;
+    color: inherit;
+    text-rendering: optimizelegibility;
+}
+        .mover {
+            /*border: 1px solid #ddd;*/
+            background-color: #ddd;
+        }
+
+        .selected {
+            background-color: #ddd;
+        }
+
+        #pointer {
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        #path {
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        #task {
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        #state {
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        img {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .node {
+            width: 200%;
+            height: 35px;
+            line-height: 30px;
+            padding: 0 8px;
+            margin: 3px 0;
+            box-sizing: border-box;
+            text-align: left;
+            vertical-align: middle;
+        }
+        .node:hover{
+            background-color: #ddd
+        }
+        .node img {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .ui-widget-header{
+            line-height: 36px;
+            font-size: 12px;
+            text-align: center;
+            color: #fff;
+            background: #353c48;
+        }
+        .ui-widget-content{
+            border: 1px solid #dfe2e5;
+            background: #fff;
+        }
+        #myflow_tools {
+            position: fixed;
+       /*     top: 10px;*/
+            left: 10px;
+            cursor: default;
+            z-index: 10;
+            padding: 10px;
+            border: 2px solid #dfe2e5;
+            background-color: #ffffff;
+            width: 300px;
+        }
+
+        #myflow_props {
+            position: fixed;
+            top: 100px;
+            left: 331.767px;
+            z-index: 101;
+            background-color: #fff;
+            width: 220px;
+            padding: 3px;
+        }
+
+        #myflow_props table {
+            width: 100%;
+            border: none;
+            cellpadding:0;
+            cellspacing:0;
+        }
+        #myflow_props th, #myflow_props td{
+            padding: 2px 5px;
+            color: #94a1b2;
+            background: #fff;
+            border: none;
+            border: none;
+        }
+        #myflow_props th {
+            width: auto;
+            letter-spacing: 2px;
+            text-align: left;
+        }
+        #myflow_props td {
+            min-width: 90px;
+        }
+        #myflow_props input {
+            line-height: 30px;
+            height: 34px;
+            width: 100%;
+            padding: 0 5px;
+            box-sizing: border-box;
+            border: 1px solid #ced0da
+        }
+
+        .tools_box, .props_box {
+            position: relative;
+            z-index: 11;
+        }
+
+        #delete {
+            width: 90px;
+            padding: 0 8px;
+            text-align: left;
+        }
+
+        .readonly {
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+            background-color: transparent;
+            width: 100%;
+            height: 100%;
+            z-index: 102;
+        }
+
+        .cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.3);
+            width: 100%;
+            height: 100%;
+            z-index: 10001;
+        }
+        .cover>.box{
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            width: 400px;
+            height:180px;
+            margin-left: -200px;
+            border: 1px solid #cccccc;
+            background-color: #ffffff;
+            z-index: 10002;
+            cursor: pointer;
+        }
+
+        .cover>.box>h4{
+            padding: 0;
+            margin: 0;
+            height: 35px;
+            line-height: 35px;
+            font-size: 18px;
+            border-bottom: 1px solid #edeeee;
+            background: #f8f8f8;
+        }
+        .cover>.box>h4>.title{
+            float: left;
+            margin-left: 15px;
+        }
+        .cover>.box>h4>.cancel{
+            float: right;
+            display: block;
+            margin: 8px 8px 0 0;
+            width: 17px;
+            height: 17px;
+            background:url("static/img/flowImages/cls.png") no-repeat left top;
+        }
+        .cover>.box>p{
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .line {
+            width: 100%;
+            height: 2px;
+            margin: 5px 0;
+            background-color: #dfe2e5;
+        }
+        #testDiv,#helpDiv,#get_params,#api_discript {
+        z-index: 9999;
+        position: fixed;
+        top: 15%;
+        left: 30%;
+        width: 50%;
+        height: 560px;
+        margin: 0 auto;
+        border-radius: 5px;
+        border: solid 2px
+        #666;
+        display: none;
+        background-color:
+        #fff;
+        box-shadow: 0 0 10px
+        #666;
+        }
+    </style>
+
+</head>
+<body>
+<div>
+<div class="top">
+		<div class="name" style="float:left;margin-top: 7px;margin-left: 25px">
+			<h3>Web流程设计器</h3>
+		</div>
+		<div class="handle" style="float:left;left:20px;margin-top: 7px;margin-left: 25px">
+			<h4>状态：选择元素</h4>
+		</div>
+		<div class="function" style="float:right;z-index:1">
+                 <div id="myflow_save" style=" float:left;padding:5px">
+                <img src="{{ url_for('static',filename='img/flowImages/save.png') }}">
+                <span>保存</span>
+                </div>
+                <div  id="testSuite" style="float:left;padding:5px">
+                    <img src="{{ url_for('static',filename='img/flowImages/save.png') }}"/>
+                    <span>测试</span>
+                </div>
+                <div  id="searchSuite" style="float:left;padding:5px">
+                    <img src="{{ url_for('static',filename='img/flowImages/linshi_save.png') }}"/>
+                    <span>查询</span>
+                </div>
+                <div class="file" style="float:left;padding:5px">
+<!--                <select name="file" id="file" onchange="displayFlow()">-->
+                    <select name="file" id="file" onchange="displaySearchFlow()">
+                    <option value="None">选择流程图</option>
+                    {% for suiteData in suiteDatas %}
+                        <option value="{{ suiteData.id }}">{{ suiteData.suiteName }}</option>
+                    {% endfor %}
+                </select>
+                </div>
+                <div class="new newSuitName" style="display:none;float:left;padding:5px">
+                    <input class="suitName" type="text" value="None" style="width:194px">
+                </div>
+                <div class="new" style="float:left;padding:5px" onclick="newSuiteName()">
+                    <input class="btn" type="button" value="新建">
+                </div>
+                <div class="delete" style="float:left;padding:5px">
+                    <input class="btn" type="button" value="删除" onclick="deleteSuite()">
+                </div>
+                <div class="getParams" style="float:left;padding:5px">
+                    <input class="btn" type="button" value="传参值" onclick="displayGetParams()">
+                </div>
+                <div style="float:left;padding:5px">
+                <input class="btn" type="button" value="帮助"   onclick="displayHelp()">
+                </div>
+
+        </div>
+</div>
+<!--<div class="cover">-->
+      <!--<div class="box">-->
+          <!--<h4><span class="title">警告</span><span class="cancel"></span></h4>-->
+          <!--<p>命名重复</p>-->
+      <!--</div>-->
+<!--</div>-->
+
+<div id="myflow_tools" class="ui-widget-content" style="float:left;left:1px;height:600px;top:50px;">
+    <div id="myflow_tools_handle" class="ui-widget-header">工具集</div>
+    <div class="tools_box">
+        <div class="readonly"></div>
+<!--        <div class="node" id="myflow_save" style="width: 100%;">-->
+<!--            <img src="{{ url_for('static',filename='img/flowImages/save.png') }}"/>-->
+<!--            <span>保存</span>-->
+<!--        </div>-->
+<!--        <div class="node" id="linshi_save" style="width: 100%;">-->
+<!--            <img src="{{ url_for('static',filename='img/flowImages/linshi_save.png') }}"/>-->
+<!--            <span>暂存</span>-->
+<!--        </div>-->
+        <div>
+        <div class="line"></div>
+        </div>
+        <div class="node selectable" id="pointer" style="width: 100%;">
+            <img src="{{ url_for('static',filename='img/flowImages/select.png') }}"/>
+            <span>选择</span>
+        </div>
+        <div class="node selectable" id="path" style="width: 100%;">
+            <img src="{{ url_for('static',filename='img/flowImages/16/flow_sequence.png') }}"/>
+            <span>連線</span>
+        </div>
+        <div>
+            <div class="line"></div>
+        </div>
+        <div class="node state" id="start" type="start" style="width: 100%;">
+            <img src="{{ url_for('static',filename='img/flowImages/16/start_event_empty.png') }}"/>
+            <span>开始</span>
+        </div>
+        <div class="selectable"  id="getApd" style="background-color:white">
+            <select style="width:180px" onchange="wctv(1)">
+                <option value="None">项目</option>
+                {% for project in project_api %}
+                <option value="{{project.id}}" text="{{project.project}}">{{project.project}}</option>
+                {% endfor %}
+            </select>
+            <ul class="pagination" style="display: inline-block;padding-left:10px;">
+              <li class="pagination" style="display: inline-block;"><button id="prePageApi" class="pagination" style="width: 30px; display: none;" onclick="prePage()">❮</button></li>
+              <li class="pagination" style="display: none">&nbsp;当前<p id="curPageApi" class="pagination" style="display: none">1</p>页&nbsp;</li>
+              <li class="pagination" style="display: inline-block;"><button id="nextPageApi" style="width: 30px; display: block; display: none"  onclick="nextPage()">❯</button></li>
+          </ul>
+        </div>
+        <div>
+            <div class="line"></div>
+        </div>
+        <div style=" overflow:scroll; width:300px; height:200px;">
+        <div class="node state" id="api_1" type="task" style="display: none;" onmouseover="displayDescription(this)" onmouseout="closeDesc()">
+            <img src="{{ url_for('static',filename='img/flowImages/16/task_empty.png') }}"/>
+            <span>任务1</span>
+            <p style="display:none">参数</p>
+        </div>
+        <div class="node state"  id="api_2"  type="task" style="display: none;"  onmouseover="displayDescription(this)" onmouseout="closeDesc()">
+            <img src="{{ url_for('static',filename='img/flowImages/16/task_empty.png') }}"/>
+            <span>任务2</span>
+            <p style="display:none">参数</p>
+        </div>
+        <div class="node state"  id="api_3"  type="task" style="display: none;"  onmouseover="displayDescription(this)" onmouseout="closeDesc()">
+            <img src="{{ url_for('static',filename='img/flowImages/16/task_empty.png') }}"/>
+            <span>任务3</span>
+            <p style="display:none">参数</p>
+        </div>
+        <div class="node state"  id="api_4" type="task" style="display: none;"  onmouseover="displayDescription(this)" onmouseout="closeDesc()">
+            <img src="{{ url_for('static',filename='img/flowImages/16/task_empty.png') }}"/>
+            <span>任务4</span>
+            <p style="display:none">参数</p>
+        </div>
+        <div class="node state"  id="api_5" type="task" style="display: none;"  onmouseover="displayDescription(this)" onmouseout="closeDesc()">
+            <img src="{{ url_for('static',filename='img/flowImages/16/task_empty.png') }}"/>
+            <span>任务5</span>
+            <p style="display:none">参数</p>
+        </div>
+        <div class="node state"  id="api_6" type="task" style="display: none;"  onmouseover="displayDescription(this)" onmouseout="closeDesc()">
+            <img src="{{ url_for('static',filename='img/flowImages/16/task_empty.png') }}"/>
+            <span>任务6</span>
+            <p style="display:none">参数</p>
+        </div>
+        <div class="node state"  id="api_7" type="task" style="display: none;"  onmouseover="displayDescription(this)" onmouseout="closeDesc()">
+            <img src="{{ url_for('static',filename='img/flowImages/16/task_empty.png') }}"/>
+            <span>任务7</span>
+            <p style="display:none">参数</p>
+        </div>
+        <div class="node state"  id="api_8" type="task" style="display: none;"  onmouseover="displayDescription(this)" onmouseout="closeDesc()">
+            <img src="{{ url_for('static',filename='img/flowImages/16/task_empty.png') }}"/>
+            <span>任务8</span>
+            <p style="display:none">参数</p>
+        </div>
+        <div class="node state"  id="api_9" type="task" style="display: none;"  onmouseover="displayDescription(this)" onmouseout="closeDesc()">
+            <img src="{{ url_for('static',filename='img/flowImages/16/task_empty.png') }}"/>
+            <span>任务9</span>
+            <p style="display:none">参数</p>
+        </div>
+        <div class="node state"  id="api_10" type="task" style="display: none;"  onmouseover="displayDescription(this)" onmouseout="closeDesc()">
+            <img src="{{ url_for('static',filename='img/flowImages/16/task_empty.png') }}"/>
+            <span>任务10</span>
+            <p style="display:none">参数</p>
+        </div>
+            </div>
+        <div class="node state" id="end"  type="end" style="width: 100%;" >
+            <img src="{{ url_for('static',filename='img/flowImages/16/end_event_terminate.png') }}"/>
+            <span>结束</span>
+        </div>
+        <div class="node state" id="end-error" type="error" style="width: 100%;">
+            <img src="{{ url_for('static',filename='img/flowImages/16/end_event_error.png') }}"/>
+            <span>错误</span>
+        </div>
+        <div class="line"></div>
+        <div id="delete" class="node" style="width: 100%;">
+            <img src="{{ url_for('static',filename='img/flowImages/16/rem.png') }}"/>
+            <span>删除</span>
+        </div>
+    </div>
+</div>
+<div id="myflow" style="overflow:scroll;width:77%;height:92%; position:fixed;float:left;left:305px;top:50px"></div>
+<div id="myflow_props" class="ui-widget-content" style="height: auto;" >
+    <div id="myflow_props_handle" class="ui-widget-header" >属性</div>
+    <div class="props_box">
+        <div class="readonly"></div>
+        <table border="1" width="100%" cellpadding="0" cellspacing="0">
+            <!--<tr>-->
+            <!--<td>aaa</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td>aaa</td>-->
+            <!--</tr>-->
+        </table>
+    </div>
+</div>
+<div id="testDiv" style="width:900px;">
+    <div id="testTitle">
+    <button onclick="displayClose()" style="float: right;">×</button>
+    <h3>测试结果</h3>
+    </div>
+    <div id="testResult" style="overflow:scroll;width:900px; height:500px;"></div>
+</div>
+<div id="get_params" style="width:400px;height: auto;max-width:500px">
+    <div id="get_params_title">
+<button onclick="displayClose()" style="float: right;">×</button>
+<h3>查询接口传参数值</h3></div>
+    <div id="getValueParam">
+    输入参数值:<input id="get_key" type="text" style="width:300px;margin:40px 0px 0px 0px"/>
+    返回参数值:<textarea rows="" cols="" id="resp_value" style="width:310px;margin: 40px 0px -16px 0px;max-width: 312px;min-width:312px;max-height: 500px;"></textarea>
+</div>
+    <button onclick="getPassValue()" style="float: left;left: 171px;top: 229px; margin:43px 0px 6px 175px">获取</button>
+</div>
+<div id="helpDiv" style="width:550px;padding:1px 1px 1px 50px">
+    <div id="helpDiv_title">
+    <button onclick="displayClose()" style="float: right;">×</button>
+    <h3>帮助信息</h3>
+    </div>
+    <div id="helpLook" style="overflow:scroll;width:500px; height:500px;">
+        <h5>Example:替换需要传递的json的value值,PS:注意细节!</h5>
+        <p>'$(tester&&test01_v1_eleven_activity_success_info&&attr(['returnCode']))'</p>
+        <h5>参数解析:</h5>
+        <p>tester:流程名称(当点击测试按钮时默认项目tester)</p>
+        <p>test01_v1_eleven_activity_success_info:测试接口名称</p>
+        <p>['returnCode']:字典参数索引</p>
+        <p>$(项目名称&&接口名称&&attr(参数索引))</p>
+        <h5>举例说明:(场景)</h5>
+        <p>第一步骤:test01_v1_eleven_activity_success_info,注册返回值</p>
+        <p>第二步骤:test01_v1_eleven_activity_verification_code,需要步骤一返回的returnCode数值</p>
+        <p>第三步骤:test01_v1_eleven_activity_verification_code 请求参数变更为:</p>
+        <p>{'phone':'$(tester&&test01_v1_eleven_activity_success_info&&attr(['returnCode']))'}</p>
+    </div>
+</div>
+
+<div id="api_discript" style="left:320px;max-height:200px;max-width:200px;width: fit-content;width: -webkit-fit-content;width: -moz-fit-content;word-wrap: break-wordleft:420px;top:400px;text-align:center">
+    <div id="api_discript_title">
+<!--    <button onclick="displayClose()" style="float: right;">×</button>-->
+    <h3>接口备注</h3>
+    </div>
+    <div id="api_discriptLook" style="width:200px; height:100px;">
+        <p></p>
+    </div>
+</div>
+</div>
+<!--<script type="text/javascript">-->
+<!--    var  menuHeight = document.getElementById('myflow');-->
+<!--    var  screenHeight = window.innerHeight;  //浏览器窗口的内部高度-->
+<!--    var screenWidth = window.innerWidth;-->
+<!--    /*menuHeight.style.height=screenHeight+200+"px";*/-->
+<!--    console.log(menuHeight);-->
+<!--    console.log(screenHeight);-->
+<!--    console.log(screenWidth);-->
+<!--</script>-->
+</body>
+</html>

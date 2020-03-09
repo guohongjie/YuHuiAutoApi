@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /> 
+  <meta charset="utf-8" /> 
+  <title>测试手机号管理</title>
+  <meta name="description" content="Electronic City Technology Department Release Record" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" /> 
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/bootstrap.min.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/font-awesome.min.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/ace-fonts.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/index.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/ace.min.css') }}" id="main-ace-style" />
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/api_edit.css') }}"/>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/script/jquery-1.10.2.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/script/jquery-1.10.2.js') }}"></script>
+  <script type="text/javascript" src="https://js.gomein.net.cn/gmlib/cookie/1.0.0/cookie.js"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/script/datepicker.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/script/index.js') }}"></script>
+        <style type="text/css">.heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}</style>
+            <script type="text/javascript">!function(e,t,a){function n(){c(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}"),o(),r()}function r(){for(var e=0;e<d.length;e++)d[e].alpha<=0?(t.body.removeChild(d[e].el),d.splice(e,1)):(d[e].y--,d[e].scale+=.004,d[e].alpha-=.013,d[e].el.style.cssText="left:"+d[e].x+"px;top:"+d[e].y+"px;opacity:"+d[e].alpha+";transform:scale("+d[e].scale+","+d[e].scale+") rotate(45deg);background:"+d[e].color+";z-index:99999");requestAnimationFrame(r)}function o(){var t="function"==typeof e.onclick&&e.onclick;e.onclick=function(e){t&&t(),i(e)}}function i(e){var a=t.createElement("div");a.className="heart",d.push({el:a,x:e.clientX-5,y:e.clientY-5,scale:1,alpha:1,color:s()}),t.body.appendChild(a)}function c(e){var a=t.createElement("style");a.type="text/css";try{a.appendChild(t.createTextNode(e))}catch(t){a.styleSheet.cssText=e}t.getElementsByTagName("head")[0].appendChild(a)}function s(){return"rgb("+~~(255*Math.random())+","+~~(255*Math.random())+","+~~(255*Math.random())+")"}var d=[];e.requestAnimationFrame=function(){return e.requestAnimationFrame||e.webkitRequestAnimationFrame||e.mozRequestAnimationFrame||e.oRequestAnimationFrame||e.msRequestAnimationFrame||function(e){setTimeout(e,1e3/60)}}(),n()}(window,document);</script>
+
+  <script src="{{ url_for('static',filename='js/script/ace-extra.min.js') }}"></script>
+ </head>
+ <body class="no-skin">
+  <div class="main-container" id="main-container"> 
+  </div>
+  <div class="main-content">
+  </div> 
+  <div class="page-content"> 
+   <div class="page-content-area">
+        <div class="table-header">
+          手机号查询
+        </div>
+        <form id="search_form" name="search_form" method="post" action="" style="padding: 0px; margin: 0px;" class="form-inline">
+        <div id="panel-body-search" class="panel-body clearfix">
+             <div class="form-group col-lg-4">
+             <label class="col-lg-4 control-label text-right">手机号归属</label>
+               <select id="PHONE" class="form-control" style="width:230px;" name="手机号归属">
+                <option value="None" selected = "selected">请选择手机号段</option>
+                   <option value="60000000">60000000***</option>
+                   <option value="60000001">60000001***</option>
+                   <option value="60000002">60000002***</option>
+                   <option value="60000003">60000003***</option>
+                   <option value="60000004">60000004***</option>
+                   <option value="60000005">60000005***</option>
+                   <option value="60000006">60000006***</option>
+                   <option value="60000007">60000007***</option>
+                   <option value="60000008">60000008***</option>
+                   <option value="60000009">60000009***</option>
+                   <option value="60000010">60000010***</option>
+                   <option value="60000011">60000011***</option>
+                   <option value="60000012">60000012***</option>
+                   <option value="60000013">60000013***</option>
+                   <option value="60000014">60000014***</option>
+                   <option value="60000015">60000015***</option>
+                   <option value="60000016">60000016***</option>
+                   <option value="60000017">60000017***</option>
+                   <option value="60000018">60000018***</option>
+                   <option value="60000019">60000019***</option>
+                   <option value="6000002">6000002****</option>
+               </select>
+             </div>
+             <div class="form-group col-lg-4">
+                                        <label class="col-lg-4 control-label text-right">环境</label>
+                                        <div class="col-lg-8">
+                                            <select id="ENV" name="ENV" class="form-control" style="width:230px;">
+                                                <option value="None">全部状态</option>
+                                                <option value="beta">beta</option>
+                                                <option value="stage,prod">stage&prod</option>
+                                            </select>
+                                        </div>
+                                    </div>
+             <div class="form-group col-lg-4">
+                                        <label class="col-lg-4 control-label text-right">账号类型说明</label>
+                                        <div class="col-lg-8">
+                                            0：学生；1：学生老师；2：家长；3：导读老师；5：已认证老师；6：助教老师
+                                        </div>
+                                    </div>
+        </div>
+        </form>
+       <div class="text-right clearfix">
+            <a class="btn btn-default update" style="margin-right: 100px" href="javascript:;">+新增测试数据</a>
+            <button class="btn btn-default" id="btn2"  style="margin-right: 30px" >查 询</button>
+			<button class="btn btn-default" type="button" onclick="clearForm();" style="margin-right: 50px">清 空</button>
+       </div>
+        <table id="sample-table-2" class="table table-striped table-bordered table-hover">
+         <tbody> 
+          <tr> 
+           <th width="5%" class="btn-info wctv" hidden="hidden">id</th>
+           <th width="25%" class="btn-info wctv">手机号码</th>
+           <th width="7%" class="btn-info wctv">账号类型</th>
+           <th width="8%" class="btn-info wctv">存在环境</th>
+           <th width="50%" class="btn-info wctv">号码描述</th>
+           <th width="10%" class="btn-info wctv">操 作</th>
+          </tr>
+         </tbody> 
+         <tbody id="casetb"> 
+         </tbody> 
+        </table>
+
+       </div>
+   </div>
+  </div> 
+  <div class="theme-popover11">
+   <div class="theme-poptit"> 
+    <a href="javascript:;" title="关闭" class="close">&times;</a> 
+    <h3>case数据</h3> 
+   </div> 
+   <div class="theme-popbod dform">
+    <table id="datatable" border="5" width="100%" class="CSSearchTbl" cellpadding="0" cellspacing="0">
+     <tbody> 
+      <tr height="36px"> 
+       <th width="2%"  hidden="hidden">id</th>
+       <th width="10%" style="text-align:center">手机号码</th>
+       <th width="15%" style="text-align:center">账号类型</th>
+       <th width="10%" style="text-align:center">存在环境</th>
+       <th width="20%" style="text-align:center">号码描述</th>
+      </tr>
+     </tbody>
+     <tbody id="tbdata">
+      <tr height="36px">
+          <td hidden="hidden"><input style="width: 100%; height: 100%" type="text" value="" id="targetId" placeholder="用例 ID"/></td>
+          <td><input style="width: 100%; height: 100%" type="text" value="None" id="case_api" placeholder="手机号码" onfocus="this.placeholder=''" onblur="this.placeholder='手机号码'"/></td>
+          <td><input style="width: 100%; height: 100%" type="text" value="None" id="case_desc" placeholder="账号类型" onfocus="this.placeholder=''" onblur="this.placeholder='账号类型'"/></td>
+          <td>
+	   <select id="case_host" style="width: 100%; height: 100%" name="请求方式">
+	    <option value="" selected="selected"> 请选择操作环境 </option>
+	    <option value="beta">beta</option>
+        <option value="stage,prod">stage,prod</option>
+	   </select>
+       </td>
+
+          <td><input style="width: 100%; height: 100%" type="text" value="None" id="case_url" placeholder="号码描述" onfocus="this.placeholder=''" onblur="this.placeholder='号码描述'"/></td>
+      </tr>
+     </tbody>
+     <tbody>
+      <tr colspan="2" style="position: relative;">
+       <td class="right" colspan="2" style="position: absolute; right: 0%; border: none;"> <button id="btn1" class="btn btn-primary pull-left col-sm-12 tbl-search" data-dismiss="modal"> 保存数据 </button> </td>
+      </tr>
+     </tbody>
+    </table>
+       <p id="chaneTexty" style="color: red;"></p>
+   </div> 
+  </div>
+  <div class="theme-popover-mask11"></div>
+  <script type="text/javascript" >$("#btn2").click(function () {
+        $.ajax({
+            url: "/query_phones",
+            type: "get",
+            data: {
+                PHONE: $("#PHONE").find("option:selected").val(),
+                ENV: $("#ENV").find("option:selected").val()
+            }
+        }).done(function (result) {
+            var _temo = []
+            for (var i = 0; i < result['data'].length; i++) {
+                _temo.push(result['data'][i]);
+            }
+            tableHTML ="";
+            for (var i = 0; i < _temo.length; i++) {
+                var j = i + 1;
+                   tableHTML = tableHTML + '<tr><td id="pid" style="display:none">' + _temo[i]["id"] + '</td><td >' + _temo[i]["phone"] + '</td><td>' + _temo[i]["type"] + '</td><td>' + _temo[i]["env"] + '</td><td>' + _temo[i]["desc"] + '</td><td style="text-align: center;"><a data-pid="' + _temo[i]["id"] + '"class="btn btn-primary btn-large theme-login update">修改</a></td></tr>';
+                }
+            $("#casetb").html(tableHTML);
+        })
+    });
+$("body").delegate(".update", "click", function () {
+                $td = $(this).parents("tr").find("td");
+                // alert("===" + $(this).data("pid"));
+                var api_pid = $td.eq(0).text();
+                var list_api_param = [$td.eq(1).text(), " " +$td.eq(2).text(), " " +$td.eq(3).text(), " " + $td.eq(4).text()+ " "];
+                $('.theme-popover-mask11').fadeIn(50);
+                $('.theme-popover11').slideDown(100);
+                changeTheme(list_api_param,api_pid)
+        });//打开新增数据弹层
+
+
+        function changeTheme(data,api_pid) {
+        var _td = $("#tbdata").find("td");
+        $("#targetId").val(api_pid);
+        _td.eq(0).find("input").val(api_pid);
+        _td.eq(1).find("input").val(data[0]);
+        _td.eq(2).find("input").val(data[1]);
+        _td.eq(3).find("#case_host").val(data[2]);
+
+        _td.eq(4).find("input").val(data[3]);
+        //alert(_td.eq(0).find("input").val());
+    };
+ $("#btn1").click(function () {
+        var _td = $("#tbdata").find("td");
+        pid = _td.eq(0).find("input").val();
+        phone = _td.eq(1).find("input").val();
+        type = _td.eq(2).find("input").val();
+        env = _td.eq(3).find("#case_host").val();
+        desc = _td.eq(4).find("input").val();
+            $.ajax({
+                url: "/update_phone",
+                type: "get",
+                data: {
+                    pid: pid,
+                    phone: phone,
+                    type: type,
+                    env: env,
+                    desc: desc
+                    }
+                    }).done(function (result){
+                    if (result.status == "200"){
+                        alert(result.datas);
+                        location.reload()}
+                    else{
+                        alert(result.datas);
+                       } });
+                       });
+                 $('.theme-poptit .close').click(function () {
+        $('.theme-popover-mask11').fadeOut(100);
+        $('.theme-popover11').slideUp(200, function () {
+            var _td = $("#tbdata").find("td");
+        });
+    });
+</script>
+ </body>
+</html>

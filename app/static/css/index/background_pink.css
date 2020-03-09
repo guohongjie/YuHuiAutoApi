@@ -1,0 +1,235 @@
+.main-layout-header {
+  height: 60px;
+  border-bottom: 1px solid pink;
+  background: #E57498;
+}
+.main-layout-header a {
+  text-decoration: none;
+}
+.main-layout-header .menu-btn {
+  float: left;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+}
+.main-layout-header .menu-btn .iconfont {
+  font-size: 20px;
+  color: #444c63;
+}
+.main-layout-header .layui-nav {
+  float: right;
+  padding: 0;
+  background: transparent;
+}
+.main-layout-header .layui-nav li {
+  border-left: 1px solid pink;
+}
+.main-layout-header .layui-nav .layui-nav-item > a:hover {
+  color: #999;
+}
+.main-layout-header .layui-nav > .layui-this a {
+  color: pink;
+}
+.main-layout-header .layui-nav .layui-nav-bar {
+  display: none;
+}
+.main-layout-header .layui-nav .layui-this:after {
+  height: 0;
+}
+.main-layout-header .layui-nav .layui-nav-child dd.layui-this a {
+  color: #333;
+}
+.main-layout-header .layui-nav .layui-nav-child dd.layui-this {
+  color: #333;
+  background: pink;
+}
+.main-layout-side {
+  width: 200px;
+  height: 100%;
+  background: #E57498;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow: auto;
+  z-index: 1;
+  -webkit-transition: left 0.3s;
+  -moz-transition: left 0.3s;
+  -ms-transition: left 0.3s;
+  transition: left 0.3s;
+}
+.main-layout-side .layui-nav {
+  background: pink;
+}
+.layui-nav-tree .layui-nav-item a:hover
+{background-color: #E57498;
+}
+
+.main-layout-side .layui-nav-itemed > a {
+  background: #E57498 !important;
+}
+ .layui-nav .layui-nav-item a:hover,
+ .layui-nav .layui-this a{color:black}
+ .layui-nav-itemed>a,.layui-nav-tree .layui-nav-title a,.layui-nav-tree .layui-nav-title a:hover{
+ background-color:#2B2E37!important;color:black!important
+ }
+ .main-layout-tab .layui-tab-title {
+  border-bottom: 1px solid pink;
+  z-index: 98;
+  background: #E57498;
+}
+.main-layout-tab.layui-tab-brief > .layui-tab-title .layui-this {
+  color: #00b5f9;
+  background: pink;
+}
+.main-layout-tab.layui-tab-brief > .layui-tab-more li.layui-this:after,
+.main-layout-tab.layui-tab-brief > .layui-tab-title .layui-this:after {
+  border: none;
+  border-radius: 0;
+  border-bottom: 3px solid #00b5f9;
+}
+.main-layout-side .layui-nav-tree .layui-nav-child .layui-this > a {
+  background-color: #E57498;
+  color: #00b5f9;
+}
+
+
+
+#switcher {
+	position: fixed;
+	bottom: 45%;
+	right: -130px;
+	width: 115px;
+	/*background-color: #404040;*/
+	color: #ffffff;
+	z-index: 9999;
+	font-size: 15px;
+	padding-bottom: 25px;
+	-webkit-transition: all 0.6s ease;
+	transition: all 0.6s ease;
+	height: 40px;
+}
+#switcher.active {
+	right: 0px;
+}
+#switcher p {
+	color: #fff;
+    top: 73px;
+    position: absolute;
+    left: 15px;
+    font-size: 16px;
+}
+#switcher .theme-click {
+	display: block;
+	position: absolute;
+	padding: 8px;
+	/*width: 60px;
+	height: 50px;*/
+	line-height: 60px;
+	color: #ffffff;
+	font-size: 24px;
+	/*background-color: #222;*/
+	text-align: center;
+	left: -62px;
+	top:  4px;
+	cursor: pointer;
+	z-index: 2;
+	border-radius: 30px 0 0 30px;
+}
+#switcher .theme-click .ti-settings{
+	font-size: 45px;
+    color: #ddd;
+}
+#switcher .theme-default {
+	width: 25px;
+	height: 25px;
+	background: black;
+	margin: 4px 4px;
+	position: absolute;
+	border-radius: 50%;
+	left: 0px;
+	cursor: pointer;
+}
+#switcher .theme-blue {
+	width: 25px;
+	height: 25px;
+	background: whitesmoke;
+	margin: 4px 4px;
+	border-radius: 50%;
+	position: absolute;
+	left: 40px;
+	cursor: pointer;
+}
+#switcher .theme-red {
+	width: 25px;
+	height: 25px;
+	background: #E57498;
+	margin: 4px 4px;
+	border-radius: 50%;
+	position: absolute;
+	left: 80px;
+	cursor: pointer;
+}
+#switcher .theme-violet {
+	width: 25px;
+	height: 25px;
+	background: #A27DE3;
+	margin: 4px 4px;
+	border-radius: 50%;
+	position: absolute;
+	left: 22px;
+	cursor: pointer;
+	top: 30px;
+}
+#switcher .theme-yellow {
+	width: 25px;
+	height: 25px;
+	background: #FF7D00;
+	margin: 4px 4px;
+	border-radius: 50%;
+	position: absolute;
+	left: 60px;
+	cursor: pointer;
+	top: 30px;
+}
+#switcher span.left-side-theme a{
+	width: 100px;
+    height: 21px;
+	background: #fff;
+	color: #FF7D00;
+    margin: 0;
+    position: absolute;
+    left: 16px;
+    cursor: pointer;
+    padding-left: 8px;
+    top: 90px;
+    font-size: 13px;
+}
+#switcher span.rtl-side-theme a{
+	width: 100px;
+    height: 21px;
+	background: #fff;
+	color: #E57498;
+    margin: 0;
+    position: absolute;
+    left: 16px;
+    cursor: pointer;
+    padding-left: 8px;
+    top: 120px;
+    font-size: 13px;
+}
+#switcher span.top-nav-theme a{
+	width: 100px;
+    height: 21px;
+	background: #fff;
+	color: #3CB371;
+    margin: 0;
+    position: absolute;
+    left: 16px;
+    cursor: pointer;
+    padding-left: 8px;
+    top: 150px;
+    font-size: 13px;
+}
+

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /> 
+  <meta charset="utf-8" /> 
+  <title>技术部接口测试</title>
+  <meta name="description" content="Electronic City Technology Department Release Record" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" /> 
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/bootstrap.min.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/font-awesome.min.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/ace-fonts.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap/ace.min.css') }}" id="main-ace-style" />
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/api_edit.css') }}"/>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/nanobar.min.js') }}"></script>
+     <script type="text/javascript" src="{{ url_for('static',filename='js/script/jquery-1.10.2.js') }}"></script>
+      <script src="{{ url_for('static',filename='js/script/ace-extra.min.js') }}"></script>
+    <style type="text/css">.heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}</style>
+            <script type="text/javascript">!function(e,t,a){function n(){c(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}"),o(),r()}function r(){for(var e=0;e<d.length;e++)d[e].alpha<=0?(t.body.removeChild(d[e].el),d.splice(e,1)):(d[e].y--,d[e].scale+=.004,d[e].alpha-=.013,d[e].el.style.cssText="left:"+d[e].x+"px;top:"+d[e].y+"px;opacity:"+d[e].alpha+";transform:scale("+d[e].scale+","+d[e].scale+") rotate(45deg);background:"+d[e].color+";z-index:99999");requestAnimationFrame(r)}function o(){var t="function"==typeof e.onclick&&e.onclick;e.onclick=function(e){t&&t(),i(e)}}function i(e){var a=t.createElement("div");a.className="heart",d.push({el:a,x:e.clientX-5,y:e.clientY-5,scale:1,alpha:1,color:s()}),t.body.appendChild(a)}function c(e){var a=t.createElement("style");a.type="text/css";try{a.appendChild(t.createTextNode(e))}catch(t){a.styleSheet.cssText=e}t.getElementsByTagName("head")[0].appendChild(a)}function s(){return"rgb("+~~(255*Math.random())+","+~~(255*Math.random())+","+~~(255*Math.random())+")"}var d=[];e.requestAnimationFrame=function(){return e.requestAnimationFrame||e.webkitRequestAnimationFrame||e.mozRequestAnimationFrame||e.oRequestAnimationFrame||e.msRequestAnimationFrame||function(e){setTimeout(e,1e3/60)}}(),n()}(window,document);</script>
+ </head>
+ <body class="no-skin">
+  <div class="main-container" id="main-container"> 
+  </div>
+  <div class="main-content">
+  </div> 
+  <div class="page-content"> 
+   <div class="page-content-area">
+     <div class="col-xs-12">
+      <div class="col-xs-12">
+        <div class="col-xs-12 table-header">
+          测试步骤查询
+        </div>
+        <div style="padding: 0px; margin: 0px;" class="col-xs-12 form-inline" >
+        <div class="col-xs-12 panel-body clearfix">
+            <div class="clearfix form-group">
+                <label class="control-label text-right">测试接口名称</label>
+                <input  type="text" id="case_name" class="form-control" style="width:230px;"　 placeholder="支持模糊查询"/>
+            </div>
+            <div class="clearfix form-group " >
+                <label class="control-label text-right">测试接口链接</label>
+                <input  type="text" id="case_url_name" class="form-control" style="width:230px;"　 placeholder="支持模糊查询"/>
+            </div>
+            <div class="clearfix form-group">
+              <label class="control-label text-right">测试数据展示</label>
+               <select id="pageDisplayCount" name="pageDisplayCount" class="form-control" style="width:100px;">
+               <option value="10">10</option>
+               <option value="20">20</option>
+               <option value="50">50</option>
+               <option value="100">100</option>
+               <option value="500">500</option>
+               <option value="1000">1000</option>
+               </select>
+            </div>
+            <div class="clearfix form-group text-right" {{style}}>
+               <button class="btn btn-default theme-login" href="javascript:;" style="float: left">+新增测试数据</button>
+               <button class="btn btn-default theme-schedule" href="javascript:;" style="float: left">+集成测试数据</button>
+           </div>
+        </div>
+        <div class="col-xs-12 panel-body clearfix">
+            <div class="clearfix form-group">
+            <label class="control-label text-right">测试业务项目</label>
+                <select id="project" class="form-control" style="width:100px;" name="测试项目_{{intBool}}" {{required}}>
+                <option value="None" selected = "selected">请选择项目</option>
+                   {% for project in api_project %}
+                   <option value="{{ project.project }}">{{ project.project }}</option>
+                   {% endfor %}
+                </select>
+            </div>
+            <div class="clearfix form-group">
+          <label class="control-label text-right">测试接口状态</label>
+           <select id="state" name="state" class="form-control" style="width:100px;">
+           <option value="None">全部状态</option>
+           <option value="0">通过</option>
+           <option value="1">失败</option>
+           </select>
+        </div>
+            <div class="clearfix form-group" >
+          <label class="control-label text-right">测试接口环境</label>
+           <select id="test_env" name="state" class="form-control" style="width:100px;">
+           <option value="None">全部状态</option>
+           <option value="beta">beta</option>
+           <option value="stage">stage</option>
+           <option value="prod">prod</option>
+           </select>
+        </div>
+            <div class="clearfix form-group">
+            <label class="control-label text-right">所属测试人员</label>
+            <select id="test_group" name="state" class="form-control" style="width:100px;">
+            <option value="None" selected = "selected">请选择人员</option>
+               {% for people in tester %}
+               <option value="{{ people }}">{{ people }}</option>
+               {% endfor %}
+           </select>
+        </div>
+            <div class="clearfix form-group">
+            <label class="control-label text-right">发布项目包</label>
+            <select id="test_project" name="state" class="form-control" style="width:100px;">
+            <option value="None" selected = "selected">请选择项目</option>
+               {% for dev_projects in dev_projects %}
+               <option value="{{ project[0] }}">{{ dev_projects[0] }}</option>
+               {% endfor %}
+           </select>
+            </div>
+            <div class="clearfix form-group text-right">
+           <button class="btn btn-default" id="btn2"  style="float: left" >查 询</button>
+           <button class="btn btn-default" type="button" onclick="clearForm();" style="float: left">清 空</button>
+       </div>
+        </div>
+        </div>
+        <div class="col-xs-12 table-header schedule"　{{style}}>
+          测试集成
+        </div>
+        <div style="padding: 0px; margin: 0px;text-align: left" class="form-inline schedule">
+            <div class="clearfix form-group">
+                <label class="control-label text-right">集成环境</label>
+                <select id="schedule_env" name="state" class="form-control" style="width:100px;">
+                       <option value="beta">beta</option>
+                       <option value="stage">stage</option>
+                       <option value="prod">prod</option>
+                </select>
+            </div>
+            <div class="clearfix form-group">
+                <label class="control-label text-right">环境编号</label>
+                <select id="schedule_num" name="state" class="form-control" style="width:100px;">
+                       <option value="1">1</option>
+                       <option value="2">2</option>
+                       <option value="3">3</option>
+                       <option value="4">4</option>
+                       <option value="5">5</option>
+                       <option value="6">6</option>
+                       <option value="7">7</option>
+                       <option value="8">8</option>
+                       <option value="9">9</option>
+                       <option value="10">10</option>
+                </select>
+            </div>
+            <div class="clearfix form-group text-right">
+            <button class="btn btn-default" id="button_schedule"
+                    style="float: left;left: 200px" >开始</button>
+            </div>
+             <div class="clearfix form-group text-right">
+                 <label style="float: left;left: 180px">全选</label>
+            <input id="CheckAll" type="checkbox"
+                    style="float: left;left: 200px" >
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <table id="sample-table-2" class="table table-striped table-bordered table-hover">
+         <tbody >
+          <tr>
+           <th width="5%" class="btn-info wctv schedule">集成</th>
+           <th width="5%" class="btn-info wctv">测试项目</th>
+           <th width="5%" class="btn-info wctv">接口名称</th>
+           <th width="20%" class="btn-info wctv">用例描述</th>
+           <th width="20%" class="btn-info wctv">请求链接</th>
+           <th width="5%" class="btn-info wctv">测试结果</th>
+           <th style="display:none" width="15%" class="btn-info wctv">预期结果</th>
+           <th style="display:none" width="15%" class="btn-info wctv">前置条件</th>
+           <th width="10%" class="btn-info wctv">操 作</th>
+          </tr>
+         </tbody> 
+         <tbody id="casetb" style="text-align: center;vertical-align: middle;"></tbody>
+        </table>
+        </div>
+       </div>
+      </div>
+   </div>
+  </div>
+  <div class="theme-popover" style="top:0%">
+   <div class="theme-poptit"> 
+    <a href="javascript:;" title="关闭" class="close">&times;</a> 
+    <h3>case数据</h3> 
+   </div> 
+   <div class="theme-popbod dform">
+    <table id="datatable" border="5" width="100%" class="CSSearchTbl" cellpadding="0" cellspacing="0">
+     <tbody> 
+      <tr height="36px">
+       <th hidden="hidden">用例 ID</th>
+       <th width="8%" style="text-align:center" class="wctv">测试项目</th>
+       <th width="10%" style="text-align:center" class="wctv">接口名称</th>
+       <th width="20%" style="text-align:center" class="wctv">用例描述</th>
+       <th width="15%" style="text-align:center" class="wctv">请求HOST</th>
+       <th width="20%" style="text-align:center" class="wctv">请求URL</th>
+       <th width="5%" style="text-align:center" class="wctv">请求方式</th>
+       <th width="22%" style="text-align:center" class="wctv">预期结果</th>
+      </tr>
+     </tbody> 
+     <tbody id="tbdata"> 
+      <tr height="36px">
+          <td hidden="hidden"><input style="width: 100%; height: 100%" type="text" value="" id="targetId" placeholder="用例 ID"/></td>
+          <td>
+           <select id="project_choice" style="width: 100%; height: 100%" name="测试项目">
+               <option value="None" selected = "selected"> 选择测试项目 </option>
+           {% for project in api_project %}
+               <option value="{{ project.project }}">{{ project.project }}</option>
+            {% endfor %}
+           </select>
+       </td>
+          <td><input style="width: 100%; height: 100%" type="text" value="None" id="case_api" placeholder="接口名称" onfocus="this.placeholder=''" onblur="this.placeholder='接口名称'"/></td>
+          <td><input style="width: 100%; height: 100%" type="text" value="None" id="case_desc" placeholder="用例描述" onfocus="this.placeholder=''" onblur="this.placeholder='用例描述'"/></td>
+          <td><input style="width: 100%; height: 100%" type="text" value="None" id="case_host" placeholder="请求HOST" onfocus="this.placeholder=''" onblur="this.placeholder='请求HOST'"/></td>
+          <td><input style="width: 100%; height: 100%" type="text" value="None" id="case_url" placeholder="请求URL" onfocus="this.placeholder=''" onblur="this.placeholder='请求URL'"/></td>
+          <td>
+               <select id="method" style="width: 100%; height: 100%" name="请求方式">
+                <option value="None" selected = "selected"> 请选择操作方式 </option>
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="HEAD">HEAD</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+                <option value="OPTIONS">OPTIONS</option>
+                <option value="PATCH">PATCH</option>
+               </select>
+          </td>
+          <td class="wctv"><input id="except_result" maxlength="900000000" style="width: 100%; height: 100%;text-align:center;" type="text" value="None" placeholder="预期结果"/></td>
+      </tr>
+     </tbody>
+    <tbody id="apt_title">
+    </tbody>
+    <tbody id="apt_datas">
+    </tbody>
+    <tbody>
+    <tr height="36px">
+        <th colspan="1" width="5%" style="text-align:center;" class="wctv">是否登录状态</th>
+        <th colspan="1" width="5%" style="text-align:center;" class="wctv">登录项目</th>
+        <th colspan="1" width="5%" style="text-align:center;" class="wctv">登录账号</th>
+        <th colspan="1" width="5%" style="text-align:center;" class="wctv">登录密码</th>
+        <th colspan="1" width="5%" style="text-align:center;" class="wctv">是否参加校验</th>
+        <th colspan="2" width="5%" style="text-align:center;" class="wctv">校验参数值(,分割)</th>
+    </tr>
+    <tr height="36px">
+        <td colspan="1" width="100%" style="text-align:center;" class="wctv"><input type="checkbox" id="check2" /></td>
+        <td colspan="1" width="100%" style="text-align:center;" class="wctv" >
+            <select id="account_project" style="width: 100%; height: 100%" name="登录项目" disabled="true">
+               <option value="None" selected = "selected"> 选择登录项目 </option>
+                {% for login_project in loginProjects %}
+               <option value="{{ login_project }}">{{ login_project }}</option>
+                {% endfor %}
+           </select>
+<!--            <input id="account_project" style="width: 100%; height: 100%;text-align:center;" disabled="true" type="text" value="None" placeholder="登陆程序"/>-->
+        </td>
+        <td colspan="1" width="100%" style="text-align:center;" class="wctv">
+            <input id="account_username" style="width: 100%; height: 100%;text-align:center;" disabled="true" type="text" value="None" placeholder="登陆账号"/>
+        </td>
+        <td colspan="1" width="100%" style="text-align:center;" class="wctv">
+            <input id="account_passwd" style="width: 100%; height: 100%;text-align:center;" disabled="true" type="password" value="None" placeholder="登陆密码"/>
+        </td>
+        <td colspan="1" width="100%" style="text-align:center;" class="wctv"><input type="checkbox" id="check_assert" /></td>
+        <td colspan="2" width="100%" style="text-align:center;" class="wctv">
+           <input id="assert_value" style="width: 100%; height: 100%;text-align:center;" disabled="true" type="text" value="None" placeholder="参数值校验(,分割)"/>
+        </td>
+    </tr>
+    </tbody>
+     <tbody id="apt_others"></tbody>
+     <tbody>
+      <tr height="36px">
+       <!--th colspan="5" width="60%">Run Request Code</th-->
+       <th colspan="8" width="100%" style="text-align:center;">Response status</th>
+      </tr>
+     </tbody>
+     <tbody id ="case_result">
+      <tr height="140" style="word-wrap:break-word;word-break:break-all;">
+          <td colspan="8" ><textarea rows="7" id="RS" style="width: 100%" wrap="logical" readonly></textarea></td>
+      </tr>
+     </tbody>
+     <tbody>
+      <tr colspan="2" style="position: relative;">
+       <td class="right" colspan="2" style="position: absolute; right: 0%; border: none;"> <button id="btn1" class="btn btn-primary pull-left col-sm-12 tbl-search" data-dismiss="modal"> 保存数据 </button> </td>
+       <td class="right" colspan="2" style="position: absolute; right: 10%; border: none;"> <button id="btn4" class="btn btn-primary pull-left col-sm-12 tbl-search" data-dismiss="modal"> 运行测试 </button> </td>
+       <td class="right" colspan="2" style="position: absolute; right: 20%; border: none;"> <button id="btn5" class="btn btn-primary pull-left col-sm-12 tbl-search" data-dismiss="modal"> Mock测试 </button> </td>
+      </tr>
+     </tbody>
+    </table>
+       <p id="chaneTexty" style="color: red;"></p>
+   </div>
+  </div>
+  <div class="theme-popover-schedule">
+   <div class="theme-poptit-schedule">
+    <a href="javascript:;" title="关闭" class="close">&times;</a>
+    <h3>持续调度数据</h3>
+   </div>
+   <div class="theme-popbod dform">
+    <table id="schedule_datatable" border="5" width="100%" class="CSSearchTbl" cellpadding="0" cellspacing="0">
+     <tbody>
+      <tr height="36px">
+       <th hidden="hidden" class="wctv">接口id</th>
+       <th width="10%" style="text-align:center" class="wctv">接口名称</th>
+       <th width="20%" style="text-align:center" class="wctv">参数值</th>
+       <th width="20%" style="text-align:center" class="wctv">使用状态</th>
+       <th width="20%" style="text-align:center" class="wctv">校验返回值</th>
+      </tr>
+     </tbody>
+     <tbody id="schedule_tbdata">
+      <tr height="36px">
+          <td hidden="hidden"><input style="width: 100%; height: 100%" type="text" value="" id="schedule_targetId" placeholder="用例 ID"/></td>
+          <td><input style="width: 100%; height: 100%" disabled="true" type="text" id="schedule_case_api" placeholder="接口名称" onfocus="this.placeholder=''" onblur="this.placeholder='接口名称'"/></td>
+          <td><input style="width: 100%; height: 100%" type="text" value="None" id="schedule_params" placeholder="参数值" onfocus="this.placeholder=''" onblur="this.placeholder='参数值'"/></td>
+          <td><input style="width: 100%; height: 100%" type="text" value="None" id="schedule_status" placeholder="集成状态" onfocus="this.placeholder=''" onblur="this.placeholder='集成状态'"/></td>
+          <td><input style="width: 100%; height: 100%" type="text" value="None" id="schedule_assertValue" placeholder="校验返回值" onfocus="this.placeholder=''" onblur="this.placeholder='校验返回值'"/></td>
+      </tr>
+     </tbody>
+          <tbody>
+      <tr colspan="2" style="position: relative;">
+       <td class="right" colspan="2" style="position: absolute; right: 10%; border: none;"> <button id="btn_schedule_test" class="btn btn-primary pull-left col-sm-12 tbl-search" data-dismiss="modal"> 运行测试 </button> </td>
+       <td class="right" colspan="2" style="position: absolute; right: 20%; border: none;"> <button id="btn_schedule_save" class="btn btn-primary pull-left col-sm-12 tbl-search" data-dismiss="modal"> 保存调度 </button> </td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+  </div>
+  <div class="theme-popover-runScheduleTest" >
+        <div class="theme-popover-runScheduleTest">
+        <a href="javascript:;" title="关闭" class="close">&times;</a>
+        <h3>集成进程</h3>
+        </div>
+      <div class="theme-popbod dform" id="progressing"></div>
+  </div>
+  <div class="theme-popover-apiCopy">
+      <div>
+        <a href="javascript:;" title="关闭" class="close">&times;</a>
+        <h3>复制用例</h3>
+        </div>
+      <div class="theme-popbod dform">
+    <table id="copy_datatable" class="CSSearchTbl" width="100%" cellspacing="0" cellpadding="0" border="5">
+     <tbody>
+      <tr height="36px">
+       <th class="wctv" hidden="hidden">接口id</th>
+       <th style="text-align:center" class="wctv" width="40%">接口用例</th>
+       <th style="text-align:center" class="wctv" width="30%">选择项目</th>
+       <th style="text-align:center" class="wctv" width="30%">选择环境</th>
+      </tr>
+     </tbody>
+     <tbody id="copy_tbdata">
+      <tr height="36px">
+          <td hidden="hidden">
+              <input style="width: 100%; height: 100%" type="text" value="" id="copy_chedule_targetId"
+                     placeholder="用例 ID">
+          </td>
+          <td> <input id="copy_api_name" style="width: 100%; height: 100%;text-align:center;" disabled="true" type="text"/></td>
+          <td>
+              <select id="copy_project_choice" style="width: 100%; height: 100%" name="测试项目">
+               <option value="" selected = "selected"> 选择测试项目 </option>
+           {% for project in selfApi_project %}
+               <option value="{{ project.project }}">{{ project.project }}</option>
+            {% endfor %}
+              </select></td>
+          <td>
+              <select id="copy_test_env" name="state" style="width:100px;">
+               <option value="None">全部状态</option>
+               <option value="beta">beta</option>
+               <option value="stage">stage</option>
+               <option value="prod">prod</option>
+            </select>
+          </td>
+      </tr>
+     </tbody>
+        <tbody><tr colspan="2" style="position: relative;"><td class="right" colspan="2" style="position: absolute; right: 0%; border: none;">
+        <button id="copy_btn" class="btn btn-primary pull-left col-sm-12 tbl-search"
+                data-dismiss="modal"> 保存数据 </button></td></tr></tbody>
+    </table>
+        </div>
+      </div>
+  <div style="text-align: center;">
+          <ul class="pagination">
+              <li class="pagination">总共<p id="totalApi" class="pagination"></p> 条记录</li>
+              <li class="pagination"><button id="prePageApi" class="pagination" style="width:50px">❮</button></li>
+              <li class="pagination">&nbsp当前<p id="curPageApi" class="pagination"></p>页&nbsp</li>
+              <li class="pagination"><button id="nextPageApi"style="width:50px" >❯</button></li>
+          </ul>
+<!--      </div>-->
+  </div>
+  <script src="{{ url_for('static',filename='js/script/case.js') }}"></script>
+ </body>
+</html>

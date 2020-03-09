@@ -1,0 +1,5 @@
+#!/bin/bash
+python db_migrate.py db init --multidb;    #multidb 设置迁移存储库以跟踪主数据以及SQLALCHEMY_BINDS配置选项中定义的任何其他数据库的迁移
+python db_migrate.py db migrate;
+python db_migrate.py db upgrade;
+

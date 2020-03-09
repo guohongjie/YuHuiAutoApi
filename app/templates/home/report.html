@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0047)file:///C:/Users/guohongjie/Desktop/report.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>测试报告</title>
+<!--图标样式-->
+<!--link rel="stylesheet" type="text/css" href="static/css/bootstrap.min-report.css"-->
+<link rel="stylesheet" type="text/css" href="static/css/bootstrap/bootstrap.min.css">
+<!--主要样式-->
+<link rel="stylesheet" type="text/css" href="static/css/report_style.css">
+
+<script type="text/javascript" src="static/js/script/jquery-1.10.2.js"></script>
+<script type="text/javascript">
+$(function(){
+    $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Expand this branch');
+    $('.tree li.parent_li > span').on('click', function (e) {
+        var children = $(this).parent('li.parent_li').find(' > ul > li');
+        if (children.is(":visible")) {
+            children.hide('fast');
+            $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
+        } else {
+            children.show('fast');
+            $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
+        }
+        e.stopPropagation();
+    });
+});
+</script>
+    <style type="text/css">.heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}</style>
+            <script type="text/javascript">!function(e,t,a){function n(){c(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}"),o(),r()}function r(){for(var e=0;e<d.length;e++)d[e].alpha<=0?(t.body.removeChild(d[e].el),d.splice(e,1)):(d[e].y--,d[e].scale+=.004,d[e].alpha-=.013,d[e].el.style.cssText="left:"+d[e].x+"px;top:"+d[e].y+"px;opacity:"+d[e].alpha+";transform:scale("+d[e].scale+","+d[e].scale+") rotate(45deg);background:"+d[e].color+";z-index:99999");requestAnimationFrame(r)}function o(){var t="function"==typeof e.onclick&&e.onclick;e.onclick=function(e){t&&t(),i(e)}}function i(e){var a=t.createElement("div");a.className="heart",d.push({el:a,x:e.clientX-5,y:e.clientY-5,scale:1,alpha:1,color:s()}),t.body.appendChild(a)}function c(e){var a=t.createElement("style");a.type="text/css";try{a.appendChild(t.createTextNode(e))}catch(t){a.styleSheet.cssText=e}t.getElementsByTagName("head")[0].appendChild(a)}function s(){return"rgb("+~~(255*Math.random())+","+~~(255*Math.random())+","+~~(255*Math.random())+")"}var d=[];e.requestAnimationFrame=function(){return e.requestAnimationFrame||e.webkitRequestAnimationFrame||e.mozRequestAnimationFrame||e.oRequestAnimationFrame||e.msRequestAnimationFrame||function(e){setTimeout(e,1e3/60)}}(),n()}(window,document);</script>
+
+</head>
+<body>
+<br/>
+<div class="tree well" style="position:absolute;float:left;background-color:white">
+	<ul>
+		<li><span title="Collapse this branch"><i class="icon-folder-open"></i> 手工集成测试报告 </span>
+	<ul>
+	{% for month in integrationFile.keys()%}
+	<li class="parent_li">
+		<span title="Collapse this branch"><i class="icon-folder-open"></i> {{ month }} 月</span>
+		{% for day in integrationFile[month] %}
+		<ul>
+			<li class="parent_li" style="display: none;">
+			<span title="Collapse this branch"><i class="icon-folder-open"></i> {{ day }} 日</span>
+				<ul>
+					{%  for report_file in integrationFile[month][day] %}
+					<li style="display: none;">
+						<span><i class="icon-leaf"></i> {{ report_file }}</span><a href="/Report/integrationReport/{{ month }}/{{day}}/{{ report_file }}">&nbsp 查看报告</a>
+					</li>
+					{% endfor %}
+				</ul>
+			</li>
+		</ul>
+		{% endfor %}
+	</li>
+	{% endfor %}
+</ul>
+		</li>
+	</ul>
+</div>
+<div class="tree well" style="position:absolute;float:left;left:35%;background-color:white">
+	<ul>
+		<li><span title="Collapse this branch"><i class="icon-folder-open"></i> 持续调度测试报告 </span>
+	<ul>
+	{% for month in scheduleFile.keys()%}
+	<li class="parent_li">
+		<span title="Collapse this branch"><i class="icon-folder-open"></i> {{ month }} 月</span>
+		{% for day in scheduleFile[month] %}
+		<ul>
+			<li class="parent_li" style="display: none;">
+			<span title="Collapse this branch"><i class="icon-folder-open"></i> {{ day }} 日</span>
+				<ul>
+					{%  for report_file in scheduleFile[month][day] %}
+					<li style="display: none;">
+						<span><i class="icon-leaf"></i> {{ report_file }}</span><a href="/Report/scheduleReport/{{ month }}/{{day}}/{{ report_file }}">&nbsp 查看报告</a>
+					</li>
+					{% endfor %}
+				</ul>
+			</li>
+		</ul>
+		{% endfor %}
+	</li>
+	{% endfor %}
+</ul>
+		</li>
+	</ul>
+</div>
+<div class="tree well" style="position:absolute;float:left;left:70%;background-color:white">
+	<ul>
+		<li><span title="Collapse this branch"><i class="icon-folder-open"></i> 工作流调度测试报告 </span>
+	<ul>
+	{% for month in workFlowFile.keys()%}
+	<li class="parent_li">
+		<span title="Collapse this branch"><i class="icon-folder-open"></i> {{ month }} 月</span>
+		{% for day in workFlowFile[month] %}
+		<ul>
+			<li class="parent_li" style="display: none;">
+			<span title="Collapse this branch"><i class="icon-folder-open"></i> {{ day }} 日</span>
+				<ul>
+					{%  for report_file in workFlowFile[month][day] %}
+					<li style="display: none;">
+						<span><i class="icon-leaf"></i> {{ report_file }}</span><a href="/Report/workFlowReport/{{ month }}/{{day}}/{{ report_file }}">&nbsp 查看报告</a>
+					</li>
+					{% endfor %}
+				</ul>
+			</li>
+		</ul>
+		{% endfor %}
+	</li>
+	{% endfor %}
+</ul>
+		</li>
+	</ul>
+</div>
+
+
+
+
+</body></html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<title>测试调度</title>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        .progressing {
+            position:relative;/*父盒子位置要用relative*/
+            width: 100%;
+            text-align: center;
+            border:2px solid #000;
+        }
+
+    </style>
+
+    <script type="text/javascript" src="{{ url_for('static',filename='js/script/jquery-1.10.2.js') }}"></script>
+   <script type="text/javascript" src="{{ url_for('static',filename='js/nanobar.min.js') }}"></script>
+  </head>
+  <body>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="panel-footer text-right clearfix">
+                            <button id="start-bg-job">Start Long Calculation</button><br><br>
+                        </div>
+                    </div>
+                </div>
+                <div id="progressing"></div>
+    <script>
+    var count_progressing=0;
+        function start_long_task() {
+            // add task status elements
+            count_progressing+=1;
+            var progressing_count="progressing_"+count_progressing
+            var casetb="casetb_"+count_progressing
+            div = $('<div class="progressing"><div></div><div class="ProgressBar" style="position:absolute;width:100%;height:40px;z-index:9999;top:10%;font-size:40px;font-weight:bold">0%</div><div class="status"  style="position:absolute;width:100%;height:40px;z-index:9999;top:60%;font-size:25px;font-weight:bold">...</div></div><hr>');
+           // var exists_progress=$('.progressing');
+           // if (exists_progress.length){
+           // $('#progressing').remove(div);
+           // $('#progressing').append(div);
+           // }
+            //else{
+            $('#progressing').append(div);
+           // };
+            // create a progress bar
+            var nanobar = new Nanobar({
+                bg: '#44f',
+                target: div[0].childNodes[0]
+            });
+
+            // send ajax POST request to start background job
+            $.ajax({
+                type: 'POST',
+                url: '/runSchedule',
+                data: {
+                project: $("#project").find("option:selected").val(),
+                developer: $("#developer").val(),
+                timer: $("#timer").val(),
+                cookies: $("#cookies").val(),
+            },
+                success: function(data, status, request) {
+                console.log(data);
+                if (data["reason"]){
+                alert(data["msg"]+"\n"+data["reason"]);
+                }else{
+                alert(data["msg"]);
+                }
+                    status_url = request.getResponseHeader('Location');
+                    var project = 'test';
+                   // var table_html='<table id="' +progressing_count+'" class="table table-striped table-bordered table-hover"><tbody><tr><th width="10%" class="btn-info">接口名称</th><th width="20%" class="btn-info">URL</th><th width="5%" class="btn-info">请求方式</th><th width="30%" class="btn-info">返回结果</th><th width="30%" class="btn-info">预期结果</th><th width="5%" class="btn-info">测试结果</th></tr></tbody><tbody id="'+casetb+'"></tbody></table>'
+                   // $('.page-content-report').append(table_html);
+                    update_progress(status_url, nanobar, div[0],casetb);
+                },
+                error: function() {
+                    alert("系统错误,请检查输入数据后重新提交");
+                }
+            });
+        }
+        function update_progress(status_url, nanobar, status_div,casetb) {
+            // send GET request to status URL
+            $.getJSON(status_url, function(data) {
+                // update UI
+                percent = parseInt(data['current'] * 100 / data['total']);
+                nanobar.go(percent);
+                $(status_div.childNodes[1]).text(percent + '%');
+                $(status_div.childNodes[2]).text(data['status']);
+                console.log(data["datas"]);
+                if (data["datas"]){
+                var tableHTML='<tr><td id="api_name">' + data["datas"]["case_api"] + '</td><td id="api_url">' + data["datas"]["case_host"] +'/'+data["datas"]["case_url"] +'</td><td id="api_method">' + data["datas"]["method"] + '</td><td id="api_resp">' + data["resp"] + '</td><td id="api_expect">'+ data["datas"]["assertValue"] + '</td><td id="api_status">' + data["pass_status"] +'</td></tr>'};
+                $("#"+casetb).append(tableHTML);
+                if (data['state'] != 'PENDING' && data['state'] != 'PROGRESS') {
+                    if ('result' in data) {
+                        // show result
+                        $(status_div.childNodes[3]).text('Result: ' + data['result']);
+                    }
+                    else {
+                        // something unexpected happened
+                        $(status_div.childNodes[3]).text('Result: ' + data['state']);
+                    }
+                }
+                else {
+                    // rerun in 2 seconds
+                    setTimeout(function() {
+                        update_progress(status_url, nanobar, status_div,casetb);
+                    }, 10000);
+                }
+            });
+        }
+        $(function() {
+            $('#start-bg-job').click(start_long_task);
+        });
+    </script>
+  </body>
+</html>

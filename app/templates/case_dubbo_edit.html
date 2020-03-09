@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /> 
+  <meta charset="utf-8" /> 
+  <title>技术部接口测试</title>
+  <meta name="description" content="Electronic City Technology Department Release Record" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" /> 
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}" /> 
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome.min.css') }}" /> 
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/ace-fonts.css') }}" /> 
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/index.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/ace.min.css') }}" id="main-ace-style" />
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/api_edit.css') }}"/>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/script/jquery-1.10.2.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/script/jquery-1.10.2.js') }}"></script>
+  <script type="text/javascript" src="https://js.gomein.net.cn/gmlib/cookie/1.0.0/cookie.js"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/datepicker.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/index.js') }}"></script>
+
+  <script src="{{ url_for('static',filename='js/ace-extra.min.js') }}"></script>
+    <style type="text/css">.heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}</style>
+            <script type="text/javascript">!function(e,t,a){function n(){c(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}"),o(),r()}function r(){for(var e=0;e<d.length;e++)d[e].alpha<=0?(t.body.removeChild(d[e].el),d.splice(e,1)):(d[e].y--,d[e].scale+=.004,d[e].alpha-=.013,d[e].el.style.cssText="left:"+d[e].x+"px;top:"+d[e].y+"px;opacity:"+d[e].alpha+";transform:scale("+d[e].scale+","+d[e].scale+") rotate(45deg);background:"+d[e].color+";z-index:99999");requestAnimationFrame(r)}function o(){var t="function"==typeof e.onclick&&e.onclick;e.onclick=function(e){t&&t(),i(e)}}function i(e){var a=t.createElement("div");a.className="heart",d.push({el:a,x:e.clientX-5,y:e.clientY-5,scale:1,alpha:1,color:s()}),t.body.appendChild(a)}function c(e){var a=t.createElement("style");a.type="text/css";try{a.appendChild(t.createTextNode(e))}catch(t){a.styleSheet.cssText=e}t.getElementsByTagName("head")[0].appendChild(a)}function s(){return"rgb("+~~(255*Math.random())+","+~~(255*Math.random())+","+~~(255*Math.random())+")"}var d=[];e.requestAnimationFrame=function(){return e.requestAnimationFrame||e.webkitRequestAnimationFrame||e.mozRequestAnimationFrame||e.oRequestAnimationFrame||e.msRequestAnimationFrame||function(e){setTimeout(e,1e3/60)}}(),n()}(window,document);</script>
+
+ </head>
+ <body class="no-skin" >
+  <div class="main-container" id="main-container"> 
+  </div>
+  <div class="main-content">
+  </div> 
+  <div class="page-content"> 
+   <div class="page-content-area">
+    <div class="row"> 
+     <div class="col-xs-12"> 
+      <div class="row">
+       <div class="col-xs-12"> 
+       </div> 
+      </div>
+      <div class="row">
+       <div class="col-xs-12">
+        <p>&nbsp;</p>
+        <br />
+        <div class="table-header">
+          测试步骤查询
+        </div>
+        <form id="search_form" name="search_form" method="post" action="" style="padding: 0px; margin: 0px;" class="form-inline">
+        <div id="panel-body-search" class="panel-body clearfix">
+         <div class="form-group col-lg-4">
+         <label class="col-lg-4 control-label text-right">测试业务项目</label>
+
+           <select id="project" class="form-control" style="width:230px;" name="测试项目">
+
+	        <option value="None" selected = "selected"> &nbsp; </option>
+               {% for project in api_project %}
+               <option value="{{ project[0] }}">{{ project[0] }}</option>
+               {% endfor %}
+           </select>
+
+
+         </div>
+         <div class="form-group col-lg-4">
+            <label class="col-lg-4 control-label text-right">测试接口名称</label>
+            <input  value="" type="text" id="case_name" class="form-control" style="width:230px;"/>
+        </div>
+         <div class="form-group col-lg-4">
+                                    <label for="inputEmail3" class="col-lg-4 control-label text-right">状态</label>
+                                    <div class="col-lg-8">
+                                        <select id="state" name="state" class="form-control" style="width:230px;">
+                                        	<option value="all">全部状态</option>
+                                        	<option value="0">冻结</option>
+                                        	<option value="1">使用中</option>
+                                        </select>
+                                    </div>
+                                </div>
+        </div>
+        </form>
+       <div class="panel-footer text-right clearfix">
+             <button class="btn btn-default" id="btn2"  style="margin-right: 30px" >查 询</button>
+								<button class="btn btn-default" type="button" onclick="clearForm();" style="margin-right: 50px">清 空</button>
+							</div>
+        <table id="sample-table-2" class="table table-striped table-bordered table-hover">
+         <tbody> 
+          <tr>
+              <th width="5%" class="btn-info">Project</th>
+           <th width="10%" class="btn-info">接口名称</th>
+           <th width="15%" class="btn-info">Service</th>
+           <th width="13%" class="btn-info">Method</th>
+              <th width="15%" class="btn-info">Params</th>
+              <th width="15%" class="btn-info">Response</th>
+              <th width="15%" class="btn-info">Description</th>
+              <th width="12%" class="btn-info">操 作</th>
+          </tr>
+         </tbody> 
+         <tbody id="casetb"> 
+         </tbody> 
+        </table>
+        <div class="theme-buy"> 
+         <a class="btn btn-primary btn-large theme-login" href="javascript:;" style="margin-top: -5%;margin-bottom: -5%;margin-right: 100%;">+新增DUBBO测试数据</a>
+        </div>
+       </div>
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+  </div> 
+  <div class="theme-popover"> 
+   <div class="theme-poptit"> 
+    <a href="javascript:location.reload();" title="关闭" class="close">&times;</a>
+    <h3>case数据</h3> 
+   </div> 
+   <div class="theme-popbod dform"> 
+    <table border="5" width="100%" class="CSSearchTbl" cellpadding="0" cellspacing="0">
+     <tbody> 
+      <tr height="36px"> 
+       <th width="5%">测试项目</th>
+          <th width="5%">HOST</th>
+          <th width="3%">PORT</th>
+       <th width="7%">接口名称</th>
+       <th width="5%">目标系统</th>
+       <th width="15%">Service</th>
+       <th width="15%">Medthod</th>
+       <th width="20%">Params</th>
+       <th width="15%">Repsonse</th>
+       <th width="10%">Description</th>
+      </tr>
+     </tbody> 
+     <tbody id="tbdata"> 
+      <tr height="36px">
+       <td>
+
+           <select id="project_choice" style="width: 100%; height: 100%" name="测试项目">
+               <option value="" selected = "selected"> 选择测试项目 </option>
+           {% for project in api_project %}
+               <option value="{{ project[0] }}">{{ project[0] }}</option>
+            {% endfor %}
+           </select>
+
+       </td>
+          <td><input id="host" style="width: 100%; height: 100%" type="text" value="" placeholder="HOST" /></td>
+          <td><input id="port" style="width: 100%; height: 100%" type="text" value="" placeholder="PORT" /></td>
+
+       <td><input style="width: 100%; height: 100%" type="text" id="case_model" value="" placeholder="接口名称"/></td>
+          <td><input id="case_id" style="width: 100%; height: 100%" type="text" value=""  placeholder="目标系统" alt="输入值为数字"/></td>
+          <td><input id="case_service" style="width: 100%; height: 100%" type="text" value=""  placeholder="Service"/></td>
+          <td><input id="case_method" style="width: 100%; height: 100%" type="text" value=""  placeholder="Method"/></td>
+          <td><input id="case_params" style="width: 100%; height: 100%" type="text" value=""  placeholder="Params"/></td>
+       <td><input id="case_response" style="width: 100%; height: 100%" type="text" value=""  placeholder="Response"/></td>
+       <td><input id="desc" style="width: 100%; height: 100%" type="text" value="" placeholder="Desc" alt="多个KEY“+”链接"/></td>
+      </tr>
+     </tbody>
+     <tbody>
+      <tr height="36px">
+       <th colspan="7" width="60%">Run Request Code</th>
+       <th colspan="5" width="40%">Response status</th>
+      </tr>
+     </tbody>
+     <tbody id ="case_result">
+      <tr height="140" style="word-wrap:break-word;word-break:break-all;">
+          <td colspan="7" ><textarea rows="7" id="RC" style="width: 100%"></textarea></td>
+          <td colspan="5" ><textarea rows="7" id="RS" style="width: 100%"></textarea></td>
+      </tr>
+     </tbody>
+     <tbody>
+      <tr colspan="2" style="position: relative;">
+       <td class="right" colspan="2" style="position: absolute; right: 0%; border: none;"> <button id="btn1" class="btn btn-primary pull-left col-sm-12 tbl-search" data-dismiss="modal"> 保存数据 </button> </td>
+       <td class="right" colspan="2" style="position: absolute; right: 10%; border: none;"> <button id="btn4" class="btn btn-primary pull-left col-sm-12 tbl-search" data-dismiss="modal"> 运行测试 </button> </td>
+          <td class="right" colspan="2" style="position: absolute; right: 20%; border: none;"> <button id="btn3" class="btn btn-primary pull-left col-sm-12 tbl-search" data-dismiss="modal"> 查询服务 </button> </td>
+
+      </tr>
+     </tbody>
+    </table>
+    <p id="chaneTexty" style="color: red;"></p>
+   </div> 
+  </div> 
+  <div class="theme-popover-mask"></div>
+  <script src="{{ url_for('static',filename='js/case_dubbo.js') }}"></script>
+ </body>
+</html>

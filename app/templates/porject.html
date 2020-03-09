@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>测试项目</title>
+<link href="static/css/bootstrap.min.css" title="" rel="stylesheet" />
+<link title="" href="static/css/style.css" rel="stylesheet" type="text/css"  />
+<link title="blue" href="static/css/dermadefault.css" rel="stylesheet" type="text/css"/>
+<link title="green" href="static/css/dermagreen.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+<link title="orange" href="static/css/dermaorange.css" rel="stylesheet" type="text/css" disabled="disabled"/>
+        <style type="text/css">.heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}</style>
+            <script type="text/javascript">!function(e,t,a){function n(){c(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}"),o(),r()}function r(){for(var e=0;e<d.length;e++)d[e].alpha<=0?(t.body.removeChild(d[e].el),d.splice(e,1)):(d[e].y--,d[e].scale+=.004,d[e].alpha-=.013,d[e].el.style.cssText="left:"+d[e].x+"px;top:"+d[e].y+"px;opacity:"+d[e].alpha+";transform:scale("+d[e].scale+","+d[e].scale+") rotate(45deg);background:"+d[e].color+";z-index:99999");requestAnimationFrame(r)}function o(){var t="function"==typeof e.onclick&&e.onclick;e.onclick=function(e){t&&t(),i(e)}}function i(e){var a=t.createElement("div");a.className="heart",d.push({el:a,x:e.clientX-5,y:e.clientY-5,scale:1,alpha:1,color:s()}),t.body.appendChild(a)}function c(e){var a=t.createElement("style");a.type="text/css";try{a.appendChild(t.createTextNode(e))}catch(t){a.styleSheet.cssText=e}t.getElementsByTagName("head")[0].appendChild(a)}function s(){return"rgb("+~~(255*Math.random())+","+~~(255*Math.random())+","+~~(255*Math.random())+")"}var d=[];e.requestAnimationFrame=function(){return e.requestAnimationFrame||e.webkitRequestAnimationFrame||e.mozRequestAnimationFrame||e.oRequestAnimationFrame||e.msRequestAnimationFrame||function(e){setTimeout(e,1e3/60)}}(),n()}(window,document);</script>
+
+</head>
+
+<body>
+<nav class="nav navbar-default navbar-mystyle navbar-fixed-top">
+  <div class="navbar-header">
+    <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> 
+     <span class="icon-bar"></span> 
+     <span class="icon-bar"></span> 
+     <span class="icon-bar"></span> 
+    </button>
+    <a class="navbar-brand mystyle-brand"><span class="glyphicon glyphicon-home"></span></a> </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+      <li class="li-border"><a class="mystyle-color" href="http://10.95.144.212:80"></a></li>
+      </li>
+    </ul>
+    
+    <ul class="nav navbar-nav pull-right">
+      <li class="li-border">
+          <a href="http://10.95.144.212:80/logout" class="mystyle-color">
+            <span class="logout">退出</span>
+          </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="down-main">
+  <div class="left-main left-off">
+    <div class="sidebar-fold"><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+    <div class="subNavBox">
+      <div class="sBox">
+      </div>
+    </div>
+  </div>
+ <iframe src="http://10.95.144.212:6001/projectIndex"  style="margin-left: 48px; height: 900px; width: 1400px;"></iframe>
+</div>
+<script src="static/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="https://js.gomein.net.cn/gmlib/cookie/1.0.0/cookie.js"></script> 
+<script src="static/js/bootstrap.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function(){
+/*换肤*/
+$(".dropdown .changecolor li").click(function(){
+  var style = $(this).attr("id");
+    $("link[title!='']").attr("disabled","disabled"); 
+  $("link[title='"+style+"']").removeAttr("disabled"); 
+
+  $.cookie('mystyle', style, { expires: 7 }); // 存储一个带7天期限的 cookie 
+})
+var cookie_style = $.cookie("mystyle"); 
+if(cookie_style!=null){ 
+    $("link[title!='']").attr("disabled","disabled"); 
+  $("link[title='"+cookie_style+"']").removeAttr("disabled"); 
+} 
+
+/*左侧导航栏显示隐藏功能*/
+$(".subNav").click(function(){        
+      /*显示*/
+      if($(this).find("span:first-child").attr('class')=="title-icon glyphicon glyphicon-chevron-down")
+      {
+        $(this).find("span:first-child").removeClass("glyphicon-chevron-down");
+          $(this).find("span:first-child").addClass("glyphicon-chevron-up");
+          $(this).removeClass("sublist-down");
+        $(this).addClass("sublist-up");
+      }
+      /*隐藏*/
+      else
+      {
+        $(this).find("span:first-child").removeClass("glyphicon-chevron-up");
+        $(this).find("span:first-child").addClass("glyphicon-chevron-down");
+        $(this).removeClass("sublist-up");
+        $(this).addClass("sublist-down");
+      } 
+    // 修改数字控制速度， slideUp(500)控制卷起速度
+      $(this).next(".navContent").slideToggle(300).siblings(".navContent").slideUp(300);
+  })
+/*左侧导航栏缩进功能*/
+$(".left-main .sidebar-fold").click(function(){
+
+  if($(this).parent().attr('class')=="left-main left-full")
+  {
+    $(this).parent().removeClass("left-full");
+    $(this).parent().addClass("left-off");
+    
+    $(this).parent().parent().find(".right-product").removeClass("right-full");
+    $(this).parent().parent().find(".right-product").addClass("right-off");
+    
+    }
+  else
+  {
+    $(this).parent().removeClass("left-off");
+    $(this).parent().addClass("left-full");
+    
+    $(this).parent().parent().find(".right-product").removeClass("right-off");
+    $(this).parent().parent().find(".right-product").addClass("right-full");
+    
+    }
+  })  
+ 
+  /*左侧鼠标移入提示功能*/
+    $(".sBox ul li").mouseenter(function(){
+      if($(this).find("span:last-child").css("display")=="none")
+      {$(this).find("div").show();}
+      }).mouseleave(function(){$(this).find("div").hide();})  
+})
+</script>
+</body>
+</html>

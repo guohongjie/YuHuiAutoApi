@@ -1,0 +1,194 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,
+dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,
+legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,
+hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video,input { margin: 0; padding: 0; }
+a{text-decoration: none;}
+li{list-style: none;}
+img{ border:none;}
+input,textarea{border: none;resize: none;outline: none;}
+h1,h2,h3,h4,h5,h6{font-weight: normal;}
+i{font-style: normal;}
+.fl{float: left;}
+.fr{float: right;}
+.clearfix:after{content:"";height:0;display:block;clear: both ;*zoom:1}
+html{font-size: 12px;}
+body{
+    font-family: "微软雅黑";
+    font-size: 14px;
+    color: #333333;
+    background-color: #ffffff;
+}
+.hidden{overflow: hidden ;}
+.basep{position: relative;}
+
+/*去除谷歌默认黄色背景*/
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+}
+
+
+header{
+    width: 100%;
+    background-color: #333333;
+}
+.header-title{
+    color:#cccccc;
+}
+
+
+.login{
+    width: 100%;
+    height: 100%;
+    background: url("../img/bg.jpg") no-repeat left top;
+    background-size: cover;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/bg.jpg',sizingMethod='scale');
+}
+
+.login .login-box{
+    position: absolute;
+    left: 50%;
+    top: 23%;
+     width: 400px;
+    background-color: #FFFFFF;
+    overflow: hidden;
+    border: 1px #b8d6e1 solid;
+}
+.login .login-box  ul {
+    width: 100%;
+    padding: 0 25px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+    border-bottom: 1px solid #e2e2e2;
+}
+.login .login-box  ul li{
+     float: left;
+     height: 50px;
+     line-height: 50px;
+     width: 50%;
+     text-align: center;
+     color: #999;
+     font-size: 18px;
+    cursor: pointer;
+}
+.login .login-box  ul .line{
+    position: absolute;
+    bottom: -1px;
+    left: 76px;
+    height: 2px;
+    width: 80px;
+    background-color: #848484;
+}
+.login .login-box h2{
+   font-size: 16px;
+   color: red;
+    margin-left: 80px;
+    height: 24px;
+    visibility:hidden;
+}
+
+.login .login-box>div{
+    width: 100%;
+    padding: 20px 0 40px 0;
+}
+
+.login .login-box  label{
+    display: block;
+    margin: 0 auto;
+    width: 240px;
+    line-height: 40px;
+    vertical-align: middle;
+    margin-top: 15px;
+}
+
+.login .login-box .form-login label{
+    border: 1px #cccccc solid;
+    border-radius: 5px;
+    background-color: #FFFFFF;
+}
+
+.login .login-box .form-login  label input{
+    background: #FFFFFF;
+    border: none;
+    font-size: 14px;
+    width: 180px;
+}
+.login .login-box .form-login label i{
+    display: inline-block;
+    width: 30px;
+    line-height: 20px;
+    font-size: 18px;
+    text-align: center;
+    border-right:1px #cccccc solid ;
+}
+
+
+.login .login-box  input[type='button']{
+    width: 240px;
+    line-height: 40px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    background-color:#2795dc;
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+    color: #FFFFFF;
+}
+.login .login-box .form-register{
+    display: none;
+}
+
+.login .login-box .form-register  label input{
+    background: #FFFFFF;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 170px;
+    line-height: 40px;
+    padding:0 5px;
+    box-sizing: border-box;
+}
+
+.index .user{
+    float: right;
+    line-height: 70px;
+    margin-right: 20px;
+    font-size: 20px;
+}
+.index .user i{
+   font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+ .index  .content{
+
+ }
+.index  .content-left,.index  .content-right{
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    min-height: 300px;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+input:-webkit-autofill {
+    background-color: #FAFFBD;
+    background-image: none;
+    color: #000;
+}
+
+.index  .content-right{
+    background-color: #eeeeee;
+}
+
+
+@media (max-width: 767px) {
+    /* Enable use of floated navbar text */
+    .container-fluid {
+        float: none;
+        margin-right:20px;
+        margin-left: 20px;
+    }
+}

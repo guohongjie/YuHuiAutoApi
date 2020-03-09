@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0" />
+<title>用戶信息</title>
+
+<link type="text/css" rel="stylesheet" href="{{url_for('static',filename='css/404.css')}}" />
+
+<!--[if IE 6]>
+<script src="{{url_for('static',filename='jquery-ui/png.jquery-ui') }}"></script>
+<script>DD_belatedPNG.fix('*')</script>
+<![endif]-->
+<script type="text/javascript" src="{{ url_for('static',filename='js/script/jquery-1.10.2.js') }}"></script>
+
+</head>
+<body>
+
+<div id="myModal"  style="position: relative;float: left;left: 40%;">
+    <div class="modal-dialog" style="position: relative;float: left;left: -100%;width: 100px;height: 100px;">
+                    <div class="modal-content" style="width: 300px;margin-left: 30%;">
+                        <div class="modal-header">
+                            <h4 class="modal-title">上传头像</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                <div class="uploadButton">
+                                    选 择
+                                    <input class="fileInput" accept="image/png,image/jpeg" type="file" style="display:none">
+                                </div>
+                                <br>
+                                <div>
+                                    <canvas class="canvass" width="240" height="240" style="cursor: move">
+                                        浏览器不支持此插件
+                                    </canvas>
+                                </div>
+                                <div class="rangeInputBox">
+                                    <input class="rangeInput" type="range" step="0.01" min="1" max="2" value="1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+	<div class="modal-dialog" style="position: relative;float: left;left: 50%;width: 100px;height: 100px;">
+           <div class="modal-content" style="width: 300px;margin-left: 30%;">
+           <div class="modal-header">
+                <h4 class="modal-title">个人信息</h4>
+           </div>
+           <div class="modal-body">
+                              <br>
+                                <div>
+                                   姓名:<br><input class="userInfo" type="text" size="10" disabled="disabled" value="{{ userDatas.userName }}">
+                                </div>
+                                <div>
+                                   组别:<br>
+                                    <select id="test_group" class="form-control" style="width:248px;" name="项目">
+                                        <option value="None" selected = "selected">请选择项目</option>
+                                         {% for dept in depts %}
+                                        <option value="{{ dept.deptName }}">{{ dept.deptName }}</option>
+                                           {% endfor %}
+                                        </select>
+                                </div>
+								<div>
+                                   邮箱:<br><input class="userInfo" width="100px" height="100px" type="text" size="10" disabled="disabled" value="{{ userDatas.mail }}">
+                                </div>
+								<div>
+                                   联系方式:<br><input class="userInfo" width="100px" height="100px" type="text" size="10" disabled="disabled" value="{{ userDatas.phone }}">
+                                </div>
+				</div>
+			   	<div class="modal-footer" style="position: relative;float: left;left: 70%;width: 100px;height: 100px;">
+         			<br>
+					<br>
+					<input id="img_submit" type="button" value="提交" style="position: absolute;float: left;left: -30%;">
+    			</div>
+		   </div>
+	</div>
+
+</div>
+<div class="animate below"></div>
+<div class="animate above"></div>
+<div style="text-align:center;">
+</div>
+<script src="{{ url_for('static',filename='js/script/uploadImg.js')}}"></script>
+
+</body>
+</html>

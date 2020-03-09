@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+  		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta http-equiv="pragma" content="no-cache">
+    	<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+    	<meta http-equiv="expires" content="0">
+		<title>余辉接口管理平台</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index/layui.css')}}"/>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index/admin.css')}}"/>
+		<link rel="stylesheet" type="text/css" id="changeCss" href="{{ url_for('static',filename='css/index/background_black.css')}}" />
+		<script src="{{ url_for('static',filename='js/script/jquery-1.10.2.js')}}" type="text/javascript" charset="utf-8"></script>
+		<script src="{{ url_for('static',filename='js/script/jquery.cookie.js')}}" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="main-layout" id='main-layout'>
+			<!--侧边栏-->
+			<div class="main-layout-side">
+				<div class="m-logo">
+				</div>
+				<ul class="layui-nav layui-nav-tree" lay-filter="leftNav">
+				  <li class="layui-nav-item layui-nav-itemed">
+				    <a href="javascript:;"><i class="iconfont">&#xe607;</i>菜单管理</a>
+				    <dl class="layui-nav-child">
+						{% for modelNameLink in modelNameLink_caidan %}
+				      <dd><a href="javascript:;" data-url="{{modelNameLink.modelLink}}" data-id="{{ modelNameLink.id }}" data-text="{{modelNameLink.modelName}}"><span class="l-line"></span>{{modelNameLink.modelName}}</a></dd>
+				    	{% endfor %}
+					</dl>
+				  </li>
+				　<li class="layui-nav-item">
+				    <a href="javascript:;"><i class="iconfont">&#xe608;</i>内容管理</a>
+				    <dl class="layui-nav-child">
+						{% for modelNameLink in modelNameLink_neirong %}
+						<dd><a href="javascript:;" data-url="{{modelNameLink.modelLink}}" data-id="{{ modelNameLink.id }}" data-text="{{modelNameLink.modelName}}"><span class="l-line"></span>{{modelNameLink.modelName}}</a></dd>
+						{% endfor %}
+				    </dl>
+				  </li>
+				 <li class="layui-nav-item">
+				    <a href="javascript:;"><i class="iconfont">&#xe608;</i>{{ deptName }}项目</a>
+				    <dl class="layui-nav-child">
+						{% for groupName in groupsApi %}
+				      <dd><a href="javascript:;" data-url="/httpIndex/{{ loop.index }}" data-id="{{ loop.index }}" data-text="{{groupName}}"><span class="l-line"></span>{{groupName}}</a></dd>
+						{% endfor %}
+					</dl>
+				  </li>
+				</ul>
+			</div>
+			<!--右侧内容-->
+			<div class="main-layout-container">
+				<!--头部-->
+				<div class="main-layout-header">
+					<div class="menu-btn" id="hideBtn">
+						<a href="javascript:;">
+							<span class="iconfont">&#xe60e;</span>
+						</a>
+					</div>
+					<ul class="layui-nav" lay-filter="rightNav">
+<!--					<li id="background_white" class="layui-nav-item white">白色</li>-->
+<!--					<li id="background_black" class="layui-nav-item black">黑色</li>-->
+<!--					<li id="project_cout" class="layui-nav-item white">项目总计：{{project_cout}}</li>-->
+<!--					<li id="interfaceCount" class="layui-nav-item white">项目接口总计：{{interfaceCount}}</li>-->
+<!--					<li id="userinterfaceCount" class="layui-nav-item white">个人接口总计：{{userinterfaceCount}}</li>-->
+					<li class="layui-nav-item">
+						{% if msgCount %}
+						<a href="javascript:;" data-url="/message" data-id='4' data-text="消息系统" style="color:red"/>
+						{% else %}
+						<a href="javascript:;" data-url="/message" data-id='4' data-text="消息系统"  style="color:green"/>
+						{% endif %}
+							<i class="iconfont">&#xe603;</i>
+						</a>
+					</li>
+					<li class="layui-nav-item">
+					    <a href="javascript:;" data-url="/userInfo" data-id='5' id="deptName" data-text="{{ userName }}個人信息" value="{{deptName}}">
+							<img id="imgName" src="{{ userImg }}" alt="" width="40px"> 欢迎！
+							{{ deptName }} 部門 {{ userName }}
+						</a>
+					</li>
+					<li class="layui-nav-item"><a href="/logout/">退出</a></li>
+					</ul>
+				</div>
+				<!--主体内容-->
+				<div class="main-layout-body">
+					<!--tab 切换-->
+					<div class="layui-tab layui-tab-brief main-layout-tab" lay-filter="tab" lay-allowClose="true">
+					  <ul class="layui-tab-title">
+					    <li class="layui-this welcome">首页</li>
+					  </ul>
+					  <div class="layui-tab-content">
+					    <div class="layui-tab-item layui-show" style="background: #f5f5f5;">
+					    	<!--1-->
+					    	<iframe src="{{ url_for('views.homeIndex') }}" width="100%" height="100%" name="iframe" scrolling="auto" class="iframe" framborder="0"></iframe>
+					    	<!--1end-->
+					    </div>
+					  </div>
+					</div>
+				</div>
+			</div>
+			<!--遮罩-->
+			<div class="main-mask">
+				
+			</div>
+		</div>
+		<div class="theme-settings" id="switcher">
+<!--		<span >-->
+			<img class="theme-click" src="static/flow/img/16/flow_sequence.png" alt="" width="40px">
+<!--			<span class="ti-settings"></span>-->
+<!--		</span>-->
+		<span id="background_black" class="theme-color theme-default theme-active" data-color="black"></span>
+		<span id="background_white" class="theme-color theme-blue theme-active" data-color="white"></span>
+		<span id="background_pink" class="theme-color theme-red theme-active" data-color="red"></span>
+		<span id="background_violet" class="theme-color theme-violet theme-active" data-color="violet"></span>
+		<span id="background_yellow" class="theme-color theme-yellow theme-active" data-color="yellow"></span>
+	</div>
+		<script src="{{ url_for('static',filename='js/index/layui/layui.js')}}" type="text/javascript" charset="utf-8"></script>
+		<script src="{{ url_for('static',filename='js/index/common.js')}}" type="text/javascript" charset="utf-8"></script>
+		<script src="{{ url_for('static',filename='js/index/main.js')}}" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(".theme-click").on('click', function () {
+        		$("#switcher").toggleClass("active");
+        		return false;
+    		});
+			var scope={
+				link:'./homeIndex.html'
+			}
+			$(function() {
+    		$('#background_white').click(function() {
+        		switchSkin(this.id);
+        	});
+        	$('#background_pink').click(function() {
+        		switchSkin(this.id);
+        	});
+        	$('#background_black').click(function() {
+        		switchSkin(this.id);
+        	});
+        	$('#background_violet').click(function() {
+        		switchSkin(this.id);
+        	});
+        	$('#background_yellow').click(function() {
+        		switchSkin(this.id);
+        	});
+        	 var cookie_skin = $.cookie('MyCssSkin');
+				if (cookie_skin) {
+				switchSkin(cookie_skin);
+    		}});
+    		var deptName=$("#deptName").attr("value");
+    		if (deptName=="其他"){
+    			alert("初始化部門,請修改個人信息");
+    			$("#deptName").css("color","red");
+    		}
+			function switchSkin(skinName) {
+				$('#changeCss').attr('href', '/static/css/index/' + skinName + '.css');
+				$.cookie('MyCssSkin',skinName,{path:'/',expires:10});
+			}
+
+
+					</script>
+
+	</body>
+</html>
