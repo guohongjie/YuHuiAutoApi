@@ -208,6 +208,7 @@ $("#flow_btn_search").click(function () {
         type: "get",
         data: {
             test_group: $("#test_group").find("option:selected").val(),
+            test_domain: $("#test_domain").find("option:selected").val(),
         }
     }).done(function (result) {
         if (result.status == "200")
@@ -217,6 +218,7 @@ $("#flow_btn_search").click(function () {
             for (var i = 0; i < result['datas'].length; i++) {
                 tableHTML = tableHTML +
                 '<tr><td style="display:none">' + result["datas"][i]["id"] +
+                '</td><td style="text-align:center">' + result["datas"][i]["RunOrderId"] +
                 '</td><td style="text-align:center">' + result["datas"][i]["domain"] +
                 '</td><td style="text-align:center">' + result["datas"][i]["name"] +
                 '</td><td style="text-align:center">' + result["datas"][i]["desc"] +
@@ -249,6 +251,7 @@ $("body").delegate(".update", "click",function(){
     else{
     $('.theme-popover').toggle();
     $("#flow_id").val(result["datas"]["id"]);
+    $("#flow_order").val(result["datas"]["flow_order"]);
     $("#flow_group").val(result["datas"]["test_group"]);
     $("#flow_name").val(result["datas"]["name"]);
     $("#flow_domain").val(result["datas"]["domain"]);
@@ -305,6 +308,7 @@ $("#flow_btn_save").click(function (){
             flow_statu:flow_statu,
             flow_desc:$("#flow_desc").val(),
             tester:tester,
+            flow_order:$("#flow_order").val(),
         }
     }).done(function (result) {
         if (result["code"]==200){

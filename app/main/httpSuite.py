@@ -7,9 +7,12 @@ from app.base.pythonProject import run
 from app import db,redis
 from app.config.api_models import Project,Test_Env,Test_User_Reg,runSuiteProject,is_Make_User
 from sqlalchemy import func
+from app.base.pythonProject.base.getConfig import s
+from app.base.pythonProject.base.couponReceive import coupon_test
 import redis as red
 import json
 from app.tasks.tasks import run_schedule_api,run_api_case
+from app.base.pythonProject.base.makeUser import makeUser_test
 import os
 import requests
 @test.route("/runSuiteApi",methods=["GET"])
@@ -23,6 +26,7 @@ def runDatasApiTest():
 	project = request.args.get("project")
 	env_num = request.args.get("env_num")
 	env_flag = request.args.get("env_flag")
+	s.add_set("ENV",env_num=env_num,env_flag=env_flag)
 	try:
 		project_en = db.session.query(Project.project_en,Project.description).filter_by(project=project).first()
 		redis_env_flag_shell = "{project_en}_env_flag".format(project_en=project_en[0])
@@ -132,6 +136,10 @@ def runDatasApiTest_yunwei():
 			redis_env_num_shell = "{project_en}_env_num".format(project_en=project_en[0])
 			redis.set(redis_env_flag_shell,env_flag)  #设置测试环境
 			redis.set(redis_env_num_shell,env_num)  #设置环境号码
+			s.add_set("ENV", env_num=env_num, env_flag=env_flag) #云舒写首页&admin 会使用config.ini配置文件
+			redis_host = s.get_env("beta").split(":") if env_flag == "beta" else s.get_env("prod_stage").split(":")
+			r = red.Redis(host=redis_host[0], port=int(redis_host[1]), password="yunshuxie1029Password")
+			r.set("021ZaJtG17hM310SblvG1NZutG1ZaJtQ",'o38sIv_7FQInsBKJEUExn7wYxoHc&21_bk4dQIEFnYz5w8zJwDqan84UFmV_XVKEO5MJf7fv1pGR8tRH2MAtxpk0Pc1SqDwe5S90CE6TQo1wd346qEA5FQ')  #wacc-order 设置 openId
 			isMakeCount = db.session.query(is_Make_User.project_en).filter_by(isMake=1,project_en=project_en[0]).count()  #是否创建用户配置表查询
 			#if "admin".upper() not in project_en[0].upper() and "crm".upper() not in project_en[0].upper() and "wacc-tortoise".upper() not in project_en[0].upper():  # 判断项目不等于admin&&crm，新增测试用户
 			if isMakeCount:
@@ -181,8 +189,71 @@ def runDatasApiTest_yunwei():
 	except Exception as e:
 		msg = {"code":400,"Msg":"执行失败","ErrorMsg":str(e)}
 	return make_response(jsonify(msg))
+@test.route("/make_user",methods=["GET"])
+def make_user():
+	env_num = request.args.get("env_num").strip()
+	env_flag = request.args.get("env_flag").strip()
+	phones = request.args.get("phones").strip()
+	user_role = request.args.get("user_role").strip()
+	try:
+		if env_flag=="":
+			raise Exception("使用环境不能为空！")
+		else:
+			if env_flag in "stage,prod":
+				new_env_flag = "stage,prod"
+			else:
+				new_env_flag = "beta"
+			resp_msg,userPhones,employeeTypes = makeUser_test(env_flag,env_num,phones,user_role)
+			for i in range(len(userPhones)):
+				datas = db.session.query(Test_User_Reg.id).filter_by(phone=userPhones[i],
+																	 type=employeeTypes[i], env=new_env_flag).count()
+				if not datas:
+					datas = Test_User_Reg(phone=userPhones[i], env=new_env_flag, type=employeeTypes[i], description="接口创建")
+					db.session.add(datas)
+					db.session.commit()
+			msg = {"code":200,"msg":"执行成功","datas":resp_msg}
+	except Exception as e:
+		msg = {"code": 400, "msg":"执行失败","datas":str(e)}
+	return make_response(jsonify(msg))
 
-
+@test.route("/get_coupon",methods=["GET"])
+def get_coupon():
+	"""
+	领取代金券接口,传入测试环境&测试环境号&代金券价格&手机号码，领取10张当天使用的优惠券
+	:return:
+	"""
+	env_num = request.args.get("env_num")
+	env_flag = request.args.get("env_flag")
+	couponPrice = request.args.get("couponPrice")
+	phone = request.args.get("phone")
+	try:
+		if env_flag == "":
+			raise Exception("使用环境不能为空！")
+		if couponPrice == "":
+			raise Exception("代金券价格不能为空！")
+		if phone == "":
+			raise Exception("领取手机号不能为空！")
+		if len(phone) != 11:
+			raise Exception("领取手机号需等于11位！")
+		if env_flag in ["stage", "prod"]:
+			select_env_flag = ",".join(["stage", "prod"])
+		else:
+			select_env_flag = "beta"
+		datas = db.session.query(Test_User_Reg.description).filter_by(phone=phone, env=select_env_flag).count()
+		if datas == 0:
+			raise Exception("手机号未存在于号码管理页面，请先增加该用户")
+		resp = coupon_test(env_flag=env_flag,env_num=env_num,couponPrice=couponPrice,phone=phone)
+		desc = json.dumps(resp["coupins_desc"],ensure_ascii=False,encoding="utf8")
+		datas = db.session.query(Test_User_Reg.id,Test_User_Reg.description).filter_by(phone=phone, env=select_env_flag).first()
+		d = datas[1] if datas[1] else ""
+		description = d +"<br/>"+desc
+		Test_User_Reg.query.filter_by(id=datas[0]).update(dict(phone=phone,description=description))
+		db.session.commit()
+	except Exception as e:
+		msg = {"code": 400, "Msg": "执行失败", "ErrorMsg": str(e)}
+	else:
+		msg = {"code": 200, "Msg": "执行成功", "ReturnMsg": resp}
+	return make_response(jsonify(msg))
 @test.route("/searchEnvNum",methods=["GET"])
 def searchEnvNum():
 	env_flag = request.args.get("env_flag")
@@ -277,4 +348,3 @@ def phones():
 	for phone in phones:
 		list_phone.append(phone[0])
 	return jsonify(",".join(list_phone))
-

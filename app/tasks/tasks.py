@@ -11,6 +11,7 @@ import requests
 import datetime
 import json
 import os
+from collections import OrderedDict
 
 #持续集成调度测试
 
@@ -164,15 +165,15 @@ def run_api_case(project_en,env_num,env_flag,description,project_cn,new_phone=No
     except Exception as e:
         return str(e)
 
-# @celery.task(base=MyTask)
+@celery.task(base=MyTask)
 def run_suite_api(suiteCount,suiteAll,cookies,domain,developer):
     """接口工作流功能域调度执行方法"""
-    # test_suite_url = r"http://uwsgi.sys.bandubanxie.com/testSuite"
-    test_suite_url = r"http://127.0.0.1:5000/testSuite"
+    test_suite_url = r"http://uwsgi.sys.bandubanxie.com/testSuite"
+    # test_suite_url = r"http://127.0.0.1:5000/testSuite"
     startTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') # 获取开始时间
     lengthSuite = suiteCount    #统计行数
     suiteAllCase = suiteAll
-    suiteNameAndRespContent = {}
+    suiteNameAndRespContent = OrderedDict()    #生成有序字典
     for singleSuite in suiteAllCase:
         suiteDatas = singleSuite.suiteDatas
         suiteName = singleSuite.suiteName

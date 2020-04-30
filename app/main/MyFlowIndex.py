@@ -5,7 +5,7 @@ from flask import render_template,request,make_response,jsonify,session
 from app.config.api_models import Project,Case_Http_API,Run_Suite
 from app import db,redis
 from sqlalchemy import func
-import json,re
+import json,re,time
 from app.config.public_function import isPassParams,outerOrderRect
 from app.tasks.tasks import run_suite_api
 import requests
@@ -42,7 +42,7 @@ def saveSuiteDatas():
     if saveUpdate=="1":    #新增
         datas = Run_Suite(user=userName,
                           test_group=deptName,suiteName=flowName,
-                          suiteDatas=suiteDatas,modifyCount=0)
+                          suiteDatas=suiteDatas,modifyCount=0,RunOrderId=1)
         db.session.add(datas)
         db.session.commit()
         resp = {'datas': '新增成功', 'code': '200'}
@@ -101,6 +101,9 @@ def testSuite():
     orderRect,orderPath = outerOrderRect(dictSuiteDatas)
     resp_msg = []
     api_detail_list = []
+    t = time.strftime("%m%d%H%M", time.localtime(time.time()))
+    # developer = session.get("userName")
+    # redis.set("scheduleSuite_developer","{'developer':'%s-%s'}"%(developer,t))
     for orderStringId in orderRect:
         if dictSuiteDatas["states"][orderStringId]["type"]=="start" or dictSuiteDatas["states"][orderStringId]["type"]=="end":
             continue
@@ -123,11 +126,12 @@ def testSuite():
                 resp_msg.append(test_dict)
                 break
             else:
-                if not suiteName:    #来源=测试按钮
-                    newSuiteName = "tester"
-                else:
-                    newSuiteName = "tester"
-                suiteName = newSuiteName+"&&"+ case_api.case_api
+                # if not suiteName:    #来源=测试按钮
+                #     newSuiteName = "tester"
+                # else:
+                #     newSuiteName = "tester"
+                # suiteName = newSuiteName+"&&"+ case_api.case_api
+                suiteName = case_api.case_api
                 req_datas = {
                         "case_host":case_api.case_host,
                         "case_url":case_api.case_url,
@@ -206,7 +210,11 @@ def getRedisValue():
             resp = {"datas":redis_pass_value,"code":"400"}
             return make_response(jsonify(resp))
         if redis_value:
-            redis_pass_value =str(eval(redis_value.decode("utf-8") + str(redis_key[1].decode("utf-8"))))
+            print redis_value
+            new_redis_value = redis_value.decode("utf-8").replace("false,", "\"false\",").replace("true,",
+                                                                                                  "\"true\",").replace(
+                "null,", "\"null\",")
+            redis_pass_value = str(eval(new_redis_value + redis_key[1].decode("utf-8")))
         else:
             redis_pass_value = "未获取到缓存数据,请检查参数!"
     else:
@@ -237,27 +245,32 @@ def scheduleSuite():
     env_flag = request.args.get("env_flag")
     developer = request.args.get("developer")
     cookies = """{"env_flag":"%s","env_num":"%s"}"""%(env_flag,env_num)
+    t = time.strftime("%m%d%H%M", time.localtime(time.time()))
+    redis.set("scheduleSuite_developer","{'developer':'%s-%s'}"%(developer,t))
     if domain:
         domainList = domain.strip().split(",")
         if len(domainList) == 1:
-            suite = Run_Suite.query.filter(func.find_in_set(domainList[0],Run_Suite.domain)).filter(Run_Suite.statu==1)
+            suite = Run_Suite.query.filter(
+                func.find_in_set(domainList[0],Run_Suite.domain)).filter(
+                Run_Suite.statu==1).order_by(Run_Suite.RunOrderId).order_by(Run_Suite.id)
             if suite.all()==[]:
                 msg = "业务域不存在"
                 resp_msg = {"datas": msg, "code": "400","total":"0"}
                 return make_response(jsonify(resp_msg))
         else:
-            sqlStr = """Run_Suite.query.filter(func.find_in_set("%s",Run_Suite.domain))"""
+            # sqlStr = """Run_Suite.query.filter(func.find_in_set("%s",Run_Suite.domain))"""
+            sqlStr = """Run_Suite.query.filter(func.find_in_set("%s",Run_Suite.domain)).order_by(Run_Suite.RunOrderId).order_by(Run_Suite.id)"""
             conditionList = []
             for i in range(1,len(domainList)):
                 unionStr = """union(%s)"""%(sqlStr%(domainList[i]))
                 conditionList.append(unionStr)
-            suite = eval(sqlStr%(domainList[0])+"."+".".join(conditionList).filter(Run_Suite.statu==1))#+".all()")
+            suite = eval(sqlStr%(domainList[0])+"."+".".join(conditionList)).filter(Run_Suite.statu==1)#+".all()")
             # print suite_all.statement.compile(compile_kwargs={"literal_binds": True})
         #
-        # run_suite_api.apply_async(
-        #     args=[suite.count(),suite.all(),cookies,domain,developer],
-        #     countdown=int(1))
-        run_suite_api(suite.count(),suite.all(),cookies,domain,developer)
+        run_suite_api.apply_async(
+            args=[suite.count(),suite.all(),cookies,domain,developer],
+            countdown=int(1))
+        # run_suite_api(suite.count(),suite.all(),cookies,domain,developer)
         resp_msg = {"datas":"功能域接口调度成功","code":"200","total":suite.count()}
     else:
         msg = "未传入业务域"

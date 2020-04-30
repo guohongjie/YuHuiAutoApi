@@ -81,10 +81,11 @@
                         <i class="am-icon-comments-o"></i>
                     </div>
                     <div class="details">
-                        <div class="number"> PhonesManager </div>
-                        <div class="desc"> 号码管理</div>
+                        <div class="number" onclick="displayCreateMooc()"> MoocClass </div>
+                        <div id="MoocClassCreate" class="desc">
+                        </div>
                     </div>
-                    <a class="more" href="/testIndex"> 查看号码
+                    <a class="more" onclick="RunCreateMooc()"> 运行
                         <i class="m-icon-swapright m-icon-white"></i>
                     </a>
                 </div>
@@ -123,6 +124,22 @@
             </div>
             <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
                 <div class="dashboard-stat red">
+                    <div class="visual">
+                        <i class="am-icon-comments-o"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number"  onclick="displayClassInput()"> CreateClass </div>
+                        <div id="CreateClass" class="desc">
+                        </div>
+                    </div>
+                    <a class="more" onclick="createClass()">
+                        创建班课
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat purple">
                     <div class="visual">
                         <i class="am-icon-comments-o"></i>
                     </div>
@@ -188,6 +205,38 @@
         $("#CreateCoupon").empty();}
     else{
         $("#CreateCoupon").append(text);
+    }
+    }
+    function displayCreateMooc(){
+    text = '<select id="choiceClass" onchange="getOptions()" class="form-control" style="background-color:transparent;float:left;width:25%;text-align:center;margin-left:20px;font-size:14px;"><option value="None" selected="selected">请选择组别</option><option value="1" id="cli">ClassIn</option><option value="2" id="bjy">百家云</option></select>';
+    text = text+'<input style="background-color:transparent;float:right;width:20%;text-align:center; font-size:14px;" type="text"  name="Moocenv" id="env" placeholder="环境">';
+    text = text+'<input style="background-color:transparent;float:right;width:15%;text-align:center;color:#FFF;opacity: 1; font-size:14px;" type="text"  name="Moocnum" id="num" placeholder="编号">';
+    text = text+'<input style="background-color:transparent;float:right;width:15%;text-align:center;color:#FFF;opacity: 1; font-size:14px;" type="text"  name="Moocphone" id="Moocphone" placeholder="手机号码">';
+    text = text+'<input style="background-color:transparent;float:right;width:15%;text-align:center;color:#FFF;opacity: 1; font-size:14px;" type="text" id="MoocDeveloper" placeholder="发起人">';
+    text = text+'<input style="background-color:transparent;float:left;width:30%;text-align:center;color:#FFF;opacity: 1; font-size:14px; display:none;" type="text" id="WebRTC" placeholder="isWebrtc">';
+    if($("#env").length>0){
+        $("#MoocClassCreate").empty();}
+    else{
+        $("#MoocClassCreate").append(text);
+        };
+}
+    function getOptions(){
+        var value=$("#choiceClass").val();
+        if(value=='1'){
+        $('#WebRTC').css('display','none');
+        }
+        if(value=='2'){
+        $('#WebRTC').css('display','block');
+        }
+    };
+
+
+    function displayClassInput(){
+    text = '<input style="background-color:transparent;float:right;width:20%;text-align:left;color:#FFF;opacity:1;" type="text" name="domain" id="domain" placeholder="域名"><input style="background-color:transparent;float:right;width:20%;text-align:left;margin-left:20px;" type="text" name="env" id="env" placeholder="环境"><input style="background-color:transparent;float:right;width:15%;text-align:left;color:#FFF;opacity: 1;" type="text"  name="num" id="num" placeholder="编号"><input style="background-color:transparent;float:right;width:25%;text-align:left;color:#FFF;opacity: 1;" type="text"  name="developer" id="developer" placeholder="开发者">';
+    if($("#env").length>0){
+        $("#CreateClass").empty();}
+    else{
+        $("#CreateClass").append(text);
     }
     }
     function displayRunSuiteApiInput(){
@@ -293,6 +342,74 @@ function createCoupon(){
       alert("请点击 CreateCoupon 元素，并输入参数");
       }
     }
+function createClass(){
+//domain=排课&env_flag=prod&env_num=1&developer=guohongjie
+    var env = $("#env").val();
+    var num = $("#num").val()
+    var domain = $("#domain").val();
+    var developer = $("#developer").val();
+  //   alert(env);
+ //    alert(num);
+ //    alert(phone);
+  //   alert(couponPrice);
+  if ($("#developer").length>0){
+       $.ajax({
+             url: "/scheduleSuite",
+             type: "get",
+             data: {
+                 env_num: num,
+                 env_flag: env,
+                 domain: domain,
+                 developer:developer
+                 }
+                 }).done(function(result){
+                    if (result.code == "200"){
+                        alert(JSON.stringify(result));
+                        }
+                    else{
+                        alert(JSON.stringify(result));
+                       }
+                });
+             }
+      else{
+      alert("请点击 CreateClass 元素，并输入参数");
+      }
+    }
+  function RunCreateMooc(){
+    var MoocClass = $("#choiceClass").find("option:selected").val();
+    if (MoocClass==1){
+        var url="/ClassInCreate";
+        }else{
+        var url="/BJYCreate";
+     }
+     var phone = $("#Moocphone").val();
+     var env = $("#env").val();
+     var num = $("#num").val();
+     var developer = $("#MoocDeveloper").val();
+     var WebRTC = $("#WebRTC").val();
+     if (phone==""||env==""||num=="") {
+        alert("参数不能为空");
+        return;
+        }
+     $.ajax({
+             url: url,
+             type: "get",
+             data: {
+                 env_flag: env,
+                 env_num: num,
+                 developer:developer,
+                 phone:phone,
+                 WebRTC:WebRTC
+                 }
+                 }).done(function(result){
+                    if (result.code == "200"){
+                        alert(JSON.stringify(result));
+                        }
+                    else{
+                        alert(JSON.stringify(result));
+                       }
+                });
+  }
  function RunSuiteApi(){
     var api_project = $("#api_project").val();
     var env_num = $("#env_num").val();

@@ -474,18 +474,17 @@ h1, h2, h3, h4, h5, h6 {
     <h3>帮助信息</h3>
     </div>
     <div id="helpLook" style="overflow:scroll;width:500px; height:500px;">
-        <h5>Example:替换需要传递的json的value值,PS:注意细节!</h5>
-        <p>'$(tester&&test01_v1_eleven_activity_success_info&&attr(['returnCode']))'</p>
+        <h5>Example:传递json的value值,PS:注意细节!</h5>
+        <p>$(test01_v1_eleven_activity_success_info&&attr(['returnCode']))</p>
         <h5>参数解析:</h5>
-        <p>tester:流程名称(当点击测试按钮时默认项目tester)</p>
         <p>test01_v1_eleven_activity_success_info:测试接口名称</p>
         <p>['returnCode']:字典参数索引</p>
-        <p>$(项目名称&&接口名称&&attr(参数索引))</p>
-        <h5>举例说明:(场景)</h5>
-        <p>第一步骤:test01_v1_eleven_activity_success_info,注册返回值</p>
-        <p>第二步骤:test01_v1_eleven_activity_verification_code,需要步骤一返回的returnCode数值</p>
-        <p>第三步骤:test01_v1_eleven_activity_verification_code 请求参数变更为:</p>
-        <p>{'phone':'$(tester&&test01_v1_eleven_activity_success_info&&attr(['returnCode']))'}</p>
+        <p>$(接口名称&&attr(参数索引))</p>
+        <h5>Example:随机参数</h5>
+        <p>$(random(['我','是',1,2,3]))</p>
+        <h5>参数解析:</h5>
+        <p>$(random()):固定语法</p>
+        <p>[参数1,参数2]:传入参数集合,与python语法一致</p>
     </div>
 </div>
 

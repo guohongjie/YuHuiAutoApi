@@ -2,7 +2,7 @@
 from app.main import views
 from flask import render_template,request,make_response,jsonify,session
 from app import db
-from app.config.api_models import Project, Case_Http_API ,Login_Base_Project
+from app.config.api_models import Project, Case_Http_API ,Case_Http_File,Login_Base_Project
 from app.config.user_models import User,DeptName
 from app.config.public_function import replace_cn
 from sqlalchemy import and_,func
@@ -359,49 +359,49 @@ def httpCopy():
         resp = {"code": 400, "datas": str(e)}
     return make_response(jsonify(resp))
 
-# @views.route("/searchHttpSchedule",methods=['GET'])
-# def searchHttpSchedule():
-#     """查询集成调度参数"""
-#     pid = request.args.get("api_pid")
-#     case_api = request.args.get("case_api")
-#     schedule_datas = Case_Http_Schedule.query.filter(Case_Http_Schedule.api_id==pid).filter(Case_Http_Schedule.case_api==case_api).first()
-#     if schedule_datas:
-#         resp_msg={"code":"200","count":"1","data":{"status":schedule_datas.status,"assertValue":schedule_datas.assertValue,"params":schedule_datas.params}}
-#     else:
-#         resp_msg={"code":"200","count":"0","data":{}}
-#     return make_response(jsonify(resp_msg))
-# @views.route("/saveHttpSchedule",methods=["GET"])
-# def saveHttpSchedule():
-#     """保存集成调度参数"""
-#     pid = request.args.get("api_pid")
-#     case_api = request.args.get("case_api")
-#     params = request.args.get("params")
-#     status = request.args.get("status")
-#     assertValue = request.args.get("assertValue")
-#     schedule_datas = Case_Http_Schedule.query.filter(Case_Http_Schedule.api_id == pid).filter(
-#         Case_Http_Schedule.case_api == case_api).first()
-#     if not schedule_datas:
-#         try:
-#             datas = Case_Http_Schedule(api_id=pid,case_api=case_api,params=params,assertValue=assertValue,status=status)
-#             db.session.add(datas)
-#             db.session.commit()
-#             resp_msg = {"datas": "%s 更新成功!" % (case_api), "code": 200}
-#         except Exception as e:
-#             db.session.rollback()
-#             resp_msg = {"code": 400, "datas": str(e)}
-#     else:    #修改数据
-#         try:
-#             Case_Http_Schedule.query.filter_by(api_id=pid).update(dict(status=status,
-#                                                                    api_id=pid,
-#                                                                    params=params,
-#                                                                    assertValue=assertValue
-#                                                                ))
-#             db.session.commit()
-#             resp_msg = {"datas": "%s 更新成功!" % (case_api), "code": 200}
-#         except Exception as e:
-#             db.session.rollback()
-#             resp_msg = {"code": 400, "datas": str(e)}
-#     return make_response(jsonify(resp_msg))
+@views.route("/searchHttpSchedule",methods=['GET'])
+def searchHttpSchedule():
+    """查询集成调度参数"""
+    pid = request.args.get("api_pid")
+    case_api = request.args.get("case_api")
+    schedule_datas = Case_Http_Schedule.query.filter(Case_Http_Schedule.api_id==pid).filter(Case_Http_Schedule.case_api==case_api).first()
+    if schedule_datas:
+        resp_msg={"code":"200","count":"1","data":{"status":schedule_datas.status,"assertValue":schedule_datas.assertValue,"params":schedule_datas.params}}
+    else:
+        resp_msg={"code":"200","count":"0","data":{}}
+    return make_response(jsonify(resp_msg))
+@views.route("/saveHttpSchedule",methods=["GET"])
+def saveHttpSchedule():
+    """保存集成调度参数"""
+    pid = request.args.get("api_pid")
+    case_api = request.args.get("case_api")
+    params = request.args.get("params")
+    status = request.args.get("status")
+    assertValue = request.args.get("assertValue")
+    schedule_datas = Case_Http_Schedule.query.filter(Case_Http_Schedule.api_id == pid).filter(
+        Case_Http_Schedule.case_api == case_api).first()
+    if not schedule_datas:
+        try:
+            datas = Case_Http_Schedule(api_id=pid,case_api=case_api,params=params,assertValue=assertValue,status=status)
+            db.session.add(datas)
+            db.session.commit()
+            resp_msg = {"datas": "%s 更新成功!" % (case_api), "code": 200}
+        except Exception as e:
+            db.session.rollback()
+            resp_msg = {"code": 400, "datas": str(e)}
+    else:    #修改数据
+        try:
+            Case_Http_Schedule.query.filter_by(api_id=pid).update(dict(status=status,
+                                                                   api_id=pid,
+                                                                   params=params,
+                                                                   assertValue=assertValue
+                                                               ))
+            db.session.commit()
+            resp_msg = {"datas": "%s 更新成功!" % (case_api), "code": 200}
+        except Exception as e:
+            db.session.rollback()
+            resp_msg = {"code": 400, "datas": str(e)}
+    return make_response(jsonify(resp_msg))
 @views.route('/httpCondition')
 def case_condition():
     """加载接口名称，操作接口名称配置"""
@@ -437,4 +437,63 @@ def httpUnionSearch():
     msg_resp = make_response(jsonify(resp))
     return msg_resp
 
+@views.route("/save_upload_data",methods=["POST"])
+def save_upload_data():
+    file_1 = request.files['file']
+    file_desc = request.form["file_desc"]
+    filename = file_1.filename
+    content_type = file_1.mimetype
+    targetId = request.form["targetId"]  #获取case_api　数据库id值,如接口新建则为999999999
+    if targetId=="999999999":  #新建数据
+        project = request.form["project"]
+        case_api = request.form["case_api"]
+        case_desc = request.form["case_desc"]
+        case_host = request.form["case_host"]
+        case_url = request.form["case_url"]
+        method = request.form["method"]
+        try:
+            targetId = db.session.query(Case_Http_API.id).filter_by(project=project,case_api=case_api,
+                                                                description=case_desc,case_host=case_host,
+                                                                    case_url=case_url,method=method).first()
+            datas = Case_Http_File(case_api_id=str(targetId[0]),file_desc=file_desc,
+                                   file_name=filename,content_type=content_type)
+            targetId = targetId[0]
+            db.session.add(datas)
+            db.session.commit()
+            resp = {"datas": "%s 更新成功!" % (case_api), "code": 200}
+        except Exception as e:
+            db.session.rollback()
+            resp = {"code": 400, "datas": str(e)}
+    else:  #修改数据
+        try:
+            datas = Case_Http_File.query.filter_by(case_api_id=targetId).update(dict(
+                file_desc=file_desc,file_name=filename,content_type=content_type))
+            if datas:
+                db.session.commit()
+                resp = {'datas': '更新成功', 'code': '200'}
+            else:  #新增数据
+                project = request.form["project"]
+                case_api = request.form["case_api"]
+                case_desc = request.form["case_desc"]
+                case_host = request.form["case_host"]
+                case_url = request.form["case_url"]
+                method = request.form["method"]
+                targetId = db.session.query(Case_Http_API.id).filter_by(project=project, case_api=case_api,
+                                                                        description=case_desc, case_host=case_host,
+                                                                        case_url=case_url, method=method,
+                                                                        id=targetId).first()
+                datas = Case_Http_File(case_api_id=targetId[0], file_desc=file_desc,
+                                       file_name=filename, content_type=content_type)
+                targetId = targetId[0]
+                db.session.add(datas)
+                db.session.commit()
+                resp = {"datas": "%s 更新成功!" % (case_api), "code": 200}
+        except Exception as e:
+            db.session.rollback()
+            resp = {'datas': str(e), 'code': '400'}
+    try:
+        file_1.save("./app/upload_file/%s_%s" % (str(targetId),filename))
+    except Exception as e:
+        resp = {'datas': str(e), 'code': '401'}
+    return make_response(jsonify(resp))
 

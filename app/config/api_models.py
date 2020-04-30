@@ -42,16 +42,18 @@ class runSuiteProject(db.Model):
 class Run_Suite(db.Model):
     __tablename__ = "RunSuite"
     id = db.Column(db.Integer, primary_key=True)  # 序号ID
-    user = db.Column(db.String(100), unique=True) # 所属用户
-    test_group = db.Column(db.String(100), unique=True) # 所属组别
-    suiteName = db.Column(db.String(200), unique=True) # 流程名称
+    RunOrderId = db.Column(db.Integer)
+    user = db.Column(db.String(100)) # 所属用户
+    test_group = db.Column(db.String(100)) # 所属组别
+    suiteName = db.Column(db.String(200)) # 流程名称
     suiteDatas = db.Column(db.Text)  #流程数据
     modifyCount = db.Column(db.Integer)  #修改次数
     domain = db.Column(db.String(100))
     statu = db.Column(db.Boolean,default=0)
     description = db.Column(db.Text)    #流程描述
-    def __init__(self,user,test_group,suiteName,suiteDatas,modifyCount,domain=None,statu=None,description=None):
+    def __init__(self,user,test_group,suiteName,suiteDatas,modifyCount,domain=None,statu=None,description=None,RunOrderId=None):
         self.user = user
+        self.RunOrderId = RunOrderId
         self.test_group = test_group
         self.suiteName = suiteName
         self.suiteDatas = suiteDatas
@@ -133,6 +135,50 @@ class Login_Base_Project(db.Model):
     def __init__(self,project,status):
         self.project = project
         self.status = status
+class Case_Http_File(db.Model):
+    
+    __tablename__ = "case_http_file"
+    id = db.Column(db.Integer, primary_key=True)
+    case_api_id = db.Column(db.String(100))
+    file_desc = db.Column(db.Text)
+    file_name = db.Column(db.String(100))
+    content_type = db.Column(db.String(500))
+    def __init__(self,case_api_id,file_desc,file_name,content_type):
+        self.case_api_id = case_api_id
+        self.file_desc = file_desc
+        self.file_name = file_name
+        self.content_type = content_type
+class Case_Dubbo_API(db.Model):
+    
+    __tablename__ = "case_dubbo_api"#表明
+    id = db.Column(db.Integer, primary_key=True)  # 序号ID
+    project = db.Column(db.String(100), db.ForeignKey('project_api.project'))
+    host = db.Column(db.String(100))
+    port = db.Column(db.Integer)
+    name = db.Column(db.String(100))
+    case_sys = db.Column(db.String(100))
+    serviceName = db.Column(db.String(100))
+    methodName = db.Column(db.String(100))
+    params = db.Column(db.Text)
+    response = db.Column(db.Text)
+    status = db.Column(db.Boolean, default=0)
+    description = db.Column(db.Text)  # 用例描述
+    api_type = db.Column(db.String(5), default='dubbo')
+    def __init__(self,project,host,port,name,case_sys,serviceName,methodName,params,response,description,api_type='dubbo',status=0):
+        self.project = project
+        self.host = host
+        self.port = port
+        self.name = name
+        self.case_sys = case_sys
+        self.serviceName = serviceName
+        self.methodName = methodName
+        self.params = params
+        self.response = response
+        self.status = status
+        self.description = description  # 用例描述
+        self.api_type = api_type
+    def __repr__(self):
+        return '<Case %r>'%(self.name)
 class Web_Model_Set(db.Model):
     
     __tablename__ = "model_set"  # 表明

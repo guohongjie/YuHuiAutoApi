@@ -43,6 +43,15 @@
                                     </select>
                                 </div>
                                 <div class="clearfix form-group">
+                                    <label class="control-label text-right">功能域</label>
+                                    <select id="test_domain" class="form-control" style="width:230px;" name="功能域">
+                                        <option value="None" selected = "selected">请选择功能域</option>
+                                        {% for domain in test_doamin %}
+                                            <option value="{{ domain.domain  }}">{{ domain.domain }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="clearfix form-group">
                                     <a href="/myFlowIndex" >链接到工作流配置</a>
                                 </div>
                             </div>
@@ -55,7 +64,8 @@
                             <tbody>
                             <tr>
                                 <th hidden="hidden">用例编号</th>
-                                <th width="13%" class="btn-info wctv">功能域</th>
+                                <th width="8%" class="btn-info wctv">运行顺序</th>
+                                <th width="10%" class="btn-info wctv">功能域</th>
                                 <th width="20%" class="btn-info wctv">工作流名称</th>
                                 <th width="30%" class="btn-info wctv">工作流描述</th>
                                 <th width="5%" class="btn-info wctv">状态</th>
@@ -81,10 +91,11 @@
             <tbody>
             <tr height="36px">
                 <th width="15%" style="text-align: center" hidden="hidden">id</th>
-                <th width="15%" style="text-align: center">所属组别</th>
+                <th width="10%" style="text-align: center">所属组别</th>
                 <th width="20%" style="text-align: center">项目名称</th>
-                <th width="5%" style="text-align: center">创建人员</th>
-                <th width="20%" style="text-align: center">关联功能域(支持多选)</th>
+                <th width="5%" style="text-align: center">执行顺序</th>
+                <th width="10%" style="text-align: center">创建人员</th>
+                <th width="15%" style="text-align: center">关联功能域(支持多选)</th>
                 <th width="5%" style="text-align: center">状态</th>
                 <th width="35%" style="text-align: center">项目描述</th>
             </tr>
@@ -94,6 +105,7 @@
                 <td hidden="hidden"><input style="display:none;width: 100%; height: 100%;padding:25px 12px 24px 12px " type="text" value="" id="flow_id" placeholder="用例编号"/></td>
                 <td><input style="width: 100%; height: 100%;padding:25px 12px 24px 12px " type="text" value="" id="flow_group" placeholder="所属组别" readonly/></td>
                 <td><input style="width: 100%; height: 100%;padding:25px 12px 24px 12px " type="text" value="" id="flow_name" placeholder="项目名称"/></td>
+                <td><input style="width: 100%; height: 100%;padding:25px 12px 24px 12px " type="text" value="" id="flow_order" placeholder="执行顺序"/></td>
                 <td><input style="width: 100%; height: 100%;padding:25px 12px 24px 12px " type="text" value="" id="flow_user" placeholder="创建人员"/></td>
                 <td>
                     <select id="flow_domain" class="form-control" style="width:100%;" name="关联功能域(支持多选)" multiple="multiple">

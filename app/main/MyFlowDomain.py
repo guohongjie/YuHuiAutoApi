@@ -5,6 +5,7 @@ from flask import render_template,request,make_response,jsonify,session
 from app.config.api_models import Run_Suite,Test_Domain
 from app.config.user_models import DeptName
 from app import db
+from sqlalchemy import func
 @flow.route("/myFlowDomain",methods=["GET"])
 def myFlowDomainIndex():
     """
@@ -24,14 +25,25 @@ def flowSearch():
     :return:
     """
     test_group = request.args.get('test_group')  # 项目组名称
-    if test_group == 'None' or test_group == None:
+    test_domain = request.args.get('test_domain')  # 项目组名称
+    if test_group == 'None' and test_domain == 'None':
         # 当项目为空、接口名为空、状态为 全部
         datas = Run_Suite.query.all()
-    else:
+    elif test_group != 'None' and test_domain == 'None':
         datas = Run_Suite.query.filter(Run_Suite.test_group==test_group).all()
+    elif test_group != 'None' and test_domain != 'None':
+        datas = Run_Suite.query.filter(Run_Suite.test_group == test_group
+                                       ).filter(
+                            func.find_in_set(test_domain,Run_Suite.domain)).order_by(
+                            Run_Suite.RunOrderId).all()
+    else:
+        datas = Run_Suite.query.filter(
+            func.find_in_set(test_domain,Run_Suite.domain)
+            ).order_by(Run_Suite.RunOrderId).all()
     suiteList = []
     for singleDatas in datas:
         suiteDatas = {"id":singleDatas.id,
+                      "RunOrderId":singleDatas.RunOrderId,
                      "domain":singleDatas.domain,
                       "name":singleDatas.suiteName,
                       "desc":singleDatas.description,
@@ -57,7 +69,8 @@ def flowSingleDatas():
            "domain":datas.domain,
            "statu":datas.statu,
            "desc":datas.description,
-           "user":datas.user}
+           "user":datas.user,
+           "flow_order":datas.RunOrderId}
     resp ={"status":200,"datas":msg}
     return make_response(jsonify(resp))
 @flow.route("/flowSaveUpdate",methods=["GET"])
@@ -72,11 +85,16 @@ def flowSaveUpdate():
     flow_statu = request.args.get("flow_statu")
     flow_desc = request.args.get("flow_desc")
     user = request.args.get("tester")
+    flow_order = request.args.get("flow_order")
+    if not flow_order.isdigit():
+        resp = {'datas': "执行序号必须为数字", 'code': '400'}
+        return make_response(jsonify(resp))
     try:
         datas = Run_Suite.query.filter_by(id=flow_id).update(dict(user=user,
                                                               suiteName=flow_name,
                                                               domain=flow_domain,
                                                               statu= 1 if flow_statu=="1" else 0,
+                                                              RunOrderId=int(flow_order),
                                                               description=flow_desc))
         db.session.commit()
         resp = {'datas': '更新成功', 'code': '200'}

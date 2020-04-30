@@ -2,6 +2,7 @@
 #-*-coding:utf-8 -*-
 import unittest
 from base import HTMLTestRunnerCN
+from base.makeSuite import MakeTestSuite
 import datetime
 import os
 import requests
